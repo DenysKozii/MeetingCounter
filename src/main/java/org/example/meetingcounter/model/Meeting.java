@@ -36,6 +36,10 @@ public class Meeting {
     @Column(name = "latitude")
     private Double latitude;
 
+    @NonNull
+    @Column(name = "availableDistance")
+    private Double availableDistance;
+
 
     @ToString.Exclude
     @ManyToMany(mappedBy = "meetings",

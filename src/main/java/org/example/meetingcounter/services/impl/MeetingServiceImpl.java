@@ -48,7 +48,11 @@ public class MeetingServiceImpl implements MeetingService {
     public MeetingDto createOrUpdateMeeting(MeetingDto meetingDto) {
         Meeting meeting = meetingRepository.findByTitle(meetingDto.getTitle());
         if (meeting == null) {
-            meeting = new Meeting(meetingDto.getTitle(), meetingDto.getHereAmount(),meetingDto.getLongitude(),meetingDto.getLatitude());
+            meeting = new Meeting(meetingDto.getTitle(),
+                    meetingDto.getHereAmount(),
+                    meetingDto.getLongitude(),
+                    meetingDto.getLatitude(),
+                    meetingDto.getAvailableDistance());
             if (validator.validate(meeting).size() == 0) {
                 return mapToMeetingDto.apply(meetingRepository.save(meeting));
             }
@@ -97,6 +101,7 @@ public class MeetingServiceImpl implements MeetingService {
             .hereAmount(meeting.getHereAmount())
             .longitude(meeting.getLongitude())
             .latitude(meeting.getLatitude())
+            .availableDistance(meeting.getAvailableDistance())
             .build());
 
 }
