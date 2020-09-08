@@ -48,7 +48,7 @@ public class MeetingServiceImpl implements MeetingService {
     public MeetingDto createOrUpdateMeeting(MeetingDto meetingDto) {
         Meeting meeting = meetingRepository.findByTitle(meetingDto.getTitle());
         if (meeting == null) {
-            meeting = new Meeting(meetingDto.getTitle(), meetingDto.getHereAmount());
+            meeting = new Meeting(meetingDto.getTitle(), meetingDto.getHereAmount(),meetingDto.getLongitude(),meetingDto.getLatitude());
             if (validator.validate(meeting).size() == 0) {
                 return mapToMeetingDto.apply(meetingRepository.save(meeting));
             }
@@ -95,6 +95,8 @@ public class MeetingServiceImpl implements MeetingService {
             .id(meeting.getId())
             .title(meeting.getTitle())
             .hereAmount(meeting.getHereAmount())
+            .longitude(meeting.getLongitude())
+            .latitude(meeting.getLatitude())
             .build());
 
 }

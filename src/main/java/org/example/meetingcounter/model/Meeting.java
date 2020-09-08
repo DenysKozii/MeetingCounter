@@ -28,6 +28,15 @@ public class Meeting {
     @Column(name = "hereAmount")
     private Long hereAmount;
 
+    @NonNull
+    @Column(name = "longitude")
+    private Double longitude;
+
+    @NonNull
+    @Column(name = "latitude")
+    private Double latitude;
+
+
     @ToString.Exclude
     @ManyToMany(mappedBy = "meetings",
             cascade = CascadeType.ALL, fetch = FetchType.LAZY)

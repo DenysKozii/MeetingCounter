@@ -52,6 +52,7 @@ public class User implements UserDetails {
     @Transient
     private String confirmPassword;
 
+    @NonNull
     @NotNull
     @Enumerated(EnumType.STRING)
     private Role role;

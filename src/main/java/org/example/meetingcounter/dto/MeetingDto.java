@@ -4,10 +4,9 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+
+import javax.persistence.Column;
 
 @Data
 @Builder
@@ -24,8 +23,14 @@ public class MeetingDto {
 
     private Long hereAmount;
 
-    public MeetingDto(String title, Long hereAmount){
+    private Double longitude;
+
+    private Double latitude;
+
+    public MeetingDto(String title, Long hereAmount, Double longitude, Double latitude) {
         this.title = title;
         this.hereAmount = hereAmount;
+        this.longitude = longitude;
+        this.latitude = latitude;
     }
 }
