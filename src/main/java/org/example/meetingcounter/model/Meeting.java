@@ -4,7 +4,9 @@ import lombok.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
@@ -39,6 +41,12 @@ public class Meeting {
     @NonNull
     @Column(name = "availableDistance")
     private Double availableDistance;
+
+    @Column(name = "start_date", columnDefinition = "DATE")
+    private LocalDate startDate;
+
+    @Column(name = "finish_date", columnDefinition = "DATE")
+    private LocalDate finishDate;
 
 
     @ToString.Exclude

@@ -71,8 +71,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 //                    .oauth2Login()
               .and()
                     .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
-
-
     }
 
     @Override

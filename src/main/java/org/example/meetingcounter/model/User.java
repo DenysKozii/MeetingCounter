@@ -57,9 +57,6 @@ public class User implements UserDetails {
     @Enumerated(EnumType.STRING)
     private Role role;
 
-    @Transient
-    private Date expirationDate;
-
     @ToString.Exclude
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "meeting_user",

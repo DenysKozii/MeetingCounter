@@ -41,27 +41,34 @@ public class UserRestController {
 
     @PostMapping("/{meetingId}/add")
     @PreAuthorize("hasAuthority('USER')")
-    public ResponseStatus addToMeeting(@PathVariable long meetingId, HttpServletRequest request) {
+    public ResponseStatus addToMeeting(@PathVariable long meetingId,
+                                       @RequestParam Double longitude,
+                                       @RequestParam Double latitude,
+                                       HttpServletRequest request) {
         log.info("Adding user to meeting");
         String userFullName = request.getUserPrincipal().getName();
         Long userId = userService.getUserIdByName(userFullName);
-        boolean added = userService.addUserToMeeting(userId, meetingId);
+        boolean added = userService.addUserToMeeting(userId, longitude, latitude, meetingId);
         return new ResponseStatus(HttpStatus.OK.value(), added ? "user successfully added" : "user already added");
     }
 
     @PostMapping("/createMeeting")
     @PreAuthorize("hasAuthority('USER')")
-    public ResponseStatus createMeeting(@RequestParam String title, HttpServletRequest request) {
+    public ResponseStatus createMeeting(@RequestParam String title,
+                                        @RequestParam Double longitude,
+                                        @RequestParam Double latitude,
+                                        @RequestParam Double availableDistance,
+                                        HttpServletRequest request) {
         log.info("Create meeting");
         boolean added = false;
         String userFullName = request.getUserPrincipal().getName();
         Long userId = userService.getUserIdByName(userFullName);
 
-        MeetingDto meetingDto = new MeetingDto(title,0L);
+        MeetingDto meetingDto = new MeetingDto(title,0L,longitude,latitude,availableDistance);
         MeetingDto createdMeeting = meetingService.createOrUpdateMeeting(meetingDto);
 
-        if(!createdMeeting.equals(meetingDto))
-            added = userService.addUserToMeeting(userId, createdMeeting.getId());
+//        if(!createdMeeting.equals(meetingDto))
+//            added = userService.addUserToMeeting(userId, createdMeeting.getId());
         return new ResponseStatus(HttpStatus.OK.value(),added ? "":"");
     }
 

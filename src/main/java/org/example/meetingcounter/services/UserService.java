@@ -2,6 +2,7 @@ package org.example.meetingcounter.services;
 
 import org.example.meetingcounter.dto.UserDto;
 import org.example.meetingcounter.model.User;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
@@ -14,7 +15,7 @@ public interface UserService  {
 
     List<UserDto> getAllByRole(String role);
 
-    boolean addUserToMeeting(Long userId, Long meetingId);
+    boolean addUserToMeeting(Long userId, Double longitude, Double latitude, Long meetingId);
 
     List<UserDto> getAllByMeetingId(Long meetingId);
 
