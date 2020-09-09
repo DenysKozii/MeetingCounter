@@ -52,6 +52,8 @@ public class Meeting {
             cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<User> users;
 
+
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

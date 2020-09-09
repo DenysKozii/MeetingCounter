@@ -19,5 +19,7 @@ public interface MeetingService {
 
     Long getHereAmountByMeeting(Long id);
 
+    MeetingDto getMeetingByTitle(String title);
+
     List<MeetingDto> getGenerateMeetingsList(Long id);
 }

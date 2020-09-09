@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import javax.persistence.EntityNotFoundException;
 import javax.validation.Validator;
 import java.util.List;
+import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -46,6 +47,8 @@ public class MeetingServiceImpl implements MeetingService {
     @Override
     public MeetingDto createOrUpdateMeeting(MeetingDto meetingDto) {
         Meeting meeting = meetingRepository.findByTitle(meetingDto.getTitle());
+
+
         if (meeting == null) {
             meeting = new Meeting(meetingDto.getTitle(),
                     meetingDto.getHereAmount(),
@@ -53,10 +56,13 @@ public class MeetingServiceImpl implements MeetingService {
                     meetingDto.getLatitude(),
                     meetingDto.getAvailableDistance());
             if (validator.validate(meeting).size() == 0) {
-                return mapToMeetingDto.apply(meetingRepository.save(meeting));
+//                return mapToMeetingDto.apply(meetingRepository.save(meeting));
+                meetingRepository.save(meeting);
+                return mapToMeetingDto.apply(meeting);
             }
         }
-        return mapToMeetingDto.apply(meetingRepository.save(meeting));
+        meetingRepository.save(meeting);
+        return mapToMeetingDto.apply(meeting);
     }
 
 //    @Override
@@ -73,12 +79,12 @@ public class MeetingServiceImpl implements MeetingService {
 
     @Override
     public boolean update(MeetingDto meetingDto) {
-        Meeting marathon = meetingRepository.findById(meetingDto.getId())
+        Meeting meeting = meetingRepository.findById(meetingDto.getId())
                 .orElseThrow(() -> new EntityNotFoundException("Meeting with id "
                         + meetingDto.getId() + " doesn't exists!"));
-        if (marathon != null && !marathon.getTitle().equals(meetingDto.getTitle()) && meetingDto.getTitle().trim().length() != 0) {
-            marathon.setTitle(meetingDto.getTitle());
-            meetingRepository.save(marathon);
+        if (meeting != null && !meeting.getTitle().equals(meetingDto.getTitle()) && meetingDto.getTitle().trim().length() != 0) {
+            meeting.setTitle(meetingDto.getTitle());
+            meetingRepository.save(meeting);
             return true;
         }
         return false;
@@ -92,6 +98,11 @@ public class MeetingServiceImpl implements MeetingService {
     @Override
     public Long getHereAmountByMeeting(Long id) {
         return meetingRepository.findHereAmountByMeetingId(id);
+    }
+
+    @Override
+    public MeetingDto getMeetingByTitle(String title) {
+        return mapToMeetingDto.apply(meetingRepository.findByTitle(title));
     }
 
     @Override

@@ -15,7 +15,10 @@ import org.mockito.Mock;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockitoTestExecutionListener;
 import org.springframework.test.context.TestExecutionListeners;
-
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.mock;
 
 @SpringBootTest
 @TestExecutionListeners(MockitoTestExecutionListener.class)
@@ -50,6 +53,6 @@ public class UserServiceTest {
 
     @Test
     void test() {
-        Assertions.assertEquals(1, 1);
+        assertEquals(1, 1);
     }
 }
