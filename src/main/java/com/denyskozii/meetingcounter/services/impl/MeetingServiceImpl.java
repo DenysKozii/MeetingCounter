@@ -94,6 +94,14 @@ public class MeetingServiceImpl implements MeetingService {
         return meetingRepository.findHereAmountByMeetingId(id);
     }
 
+    @Override
+    public List<MeetingDto> getGenerateMeetingsList(Long id) {
+        return meetingRepository
+                .getGenerateMeetingsList(id).stream()
+                .map(mapToMeetingDto)
+                .collect(Collectors.toList());
+    }
+
     Function<Meeting, MeetingDto> mapToMeetingDto = (meeting -> MeetingDto.builder()
             .id(meeting.getId())
             .title(meeting.getTitle())

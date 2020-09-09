@@ -14,6 +14,8 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
+import java.util.List;
 
 @RestController
 @Slf4j
@@ -67,6 +69,12 @@ public class UserRestController {
 //        if(!createdMeeting.equals(meetingDto))
 //            added = userService.addUserToMeeting(userId, createdMeeting.getId());
         return new ResponseStatus(HttpStatus.OK.value(),added ? "":"");
+    }
+    @GetMapping("/generateMeetings/{id}")
+    @PreAuthorize("hasAuthority('USER')")
+    public List<MeetingDto> generateMeetings(@PathVariable long id) {
+        log.info("Generate meetings");
+        return meetingService.getGenerateMeetingsList(id);
     }
 
 

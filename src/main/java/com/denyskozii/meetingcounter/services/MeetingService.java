@@ -18,4 +18,6 @@ public interface MeetingService {
     public boolean update(MeetingDto meetingDto);
 
     Long getHereAmountByMeeting(Long id);
+
+    List<MeetingDto> getGenerateMeetingsList(Long id);
 }
