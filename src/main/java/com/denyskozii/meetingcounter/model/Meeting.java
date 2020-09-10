@@ -1,6 +1,7 @@
 package com.denyskozii.meetingcounter.model;
 
 import lombok.*;
+import org.hibernate.validator.constraints.UniqueElements;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -20,9 +21,14 @@ public class Meeting {
     private Long id;
 
     @NonNull
+    @UniqueElements
     @NotBlank(message = "Must not be blank")
     @Column(name = "title")
     private String title;
+
+    @NonNull
+    @Column(name = "description")
+    private String description;
 
     @NonNull
     @Column(name = "hereAmount")

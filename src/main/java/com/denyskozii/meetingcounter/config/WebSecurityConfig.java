@@ -19,12 +19,14 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.core.annotation.Order;
 
 import java.util.Arrays;
 
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
+@Order(1000)
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
@@ -44,12 +46,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-//        http
-//                .antMatcher("/**").authorizeRequests()
-//                .antMatchers(new String[]{"/", "/not-restricted"}).permitAll()
-//                .anyRequest().authenticated()
-//                .and()
-//                .oauth2Login();
       http
                     .cors()
                 .and()
@@ -58,8 +54,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                     .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                     .authorizeRequests()
-                    .antMatchers(/*"/", "/not-restricted",*/"/registration",/*"/static/**","validation.js", "/validation.js",*/ "/login", "/form-login","/user/hello").permitAll()
-//                    .antMatchers("/**")/*.authorizeRequests()*/
+                    .antMatchers("/registration","/login", "/form-login","/user/hello").permitAll()
               .anyRequest().authenticated()
                 .and()
                     .logout()
@@ -67,8 +62,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                     .exceptionHandling()
                     .accessDeniedHandler((request, response, accessDeniedException) -> response.sendRedirect("/access-denied"))
-//                .and()
-//                    .oauth2Login()
               .and()
                     .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
     }

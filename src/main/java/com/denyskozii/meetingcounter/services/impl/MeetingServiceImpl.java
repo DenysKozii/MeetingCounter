@@ -51,6 +51,7 @@ public class MeetingServiceImpl implements MeetingService {
 
         if (meeting == null) {
             meeting = new Meeting(meetingDto.getTitle(),
+                    meetingDto.getDescription(),
                     meetingDto.getHereAmount(),
                     meetingDto.getLongitude(),
                     meetingDto.getLatitude(),
@@ -116,6 +117,7 @@ public class MeetingServiceImpl implements MeetingService {
     Function<Meeting, MeetingDto> mapToMeetingDto = (meeting -> MeetingDto.builder()
             .id(meeting.getId())
             .title(meeting.getTitle())
+            .description(meeting.getDescription())
             .hereAmount(meeting.getHereAmount())
             .longitude(meeting.getLongitude())
             .latitude(meeting.getLatitude())

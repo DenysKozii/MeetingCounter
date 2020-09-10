@@ -54,6 +54,7 @@ public class UserRestController {
     @PostMapping("/createMeeting")
     @PreAuthorize("hasAuthority('USER')")
     public ResponseStatus createMeeting(@RequestParam String title,
+                                        @RequestParam String description,
                                         @RequestParam Double longitude,
                                         @RequestParam Double latitude,
                                         @RequestParam Double availableDistance,
@@ -63,7 +64,7 @@ public class UserRestController {
         String userFullName = request.getUserPrincipal().getName();
         Long userId = userService.getUserIdByName(userFullName);
 
-        MeetingDto meetingDto = new MeetingDto(title,0L,longitude,latitude,availableDistance);
+        MeetingDto meetingDto = new MeetingDto(title,description,0L,longitude,latitude,availableDistance);
         MeetingDto createdMeeting = meetingService.createOrUpdateMeeting(meetingDto);
 
 //        if(!createdMeeting.equals(meetingDto))

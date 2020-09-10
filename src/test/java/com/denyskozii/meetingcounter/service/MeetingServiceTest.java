@@ -20,8 +20,8 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.Mockito.doReturn;
-import static org.mockito.Mockito.mock;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.*;
 
 import java.util.List;
 
@@ -38,15 +38,17 @@ public class MeetingServiceTest {
     @BeforeEach
     public void setUp() {
         meetingService = new MeetingServiceImpl(meetingRepository);
-        Meeting meeting = new Meeting("FirstMeeting",0L,0D,0D,10D);
+        Meeting meeting = new Meeting("FirstMeeting","none",0L,0D,0D,10D);
         meeting.setId(1L);
         doReturn(meeting).when(meetingRepository).findByTitle("FirstMeeting");
         doReturn(Optional.of(meeting)).when(meetingRepository).findById(1L);
         doReturn(List.of(meeting)).when(meetingRepository).findAll();
         doReturn(List.of(meeting)).when(meetingRepository).getGenerateMeetingsList(0L);
+
     }
     private MeetingDto getMeetingDto (Long id,
                                       String title,
+                                      String description,
                                       Long hereAmount,
                                       Double longitude,
                                       Double latitude,
@@ -54,6 +56,7 @@ public class MeetingServiceTest {
         return MeetingDto.builder()
                 .id(id)
                 .title(title)
+                .description(description)
                 .hereAmount(hereAmount)
                 .longitude(longitude)
                 .latitude(latitude)
@@ -67,7 +70,7 @@ public class MeetingServiceTest {
     }
     @Test
     public void getByTitle() {
-        MeetingDto meetingDto = getMeetingDto(1L,"FirstMeeting",0L,0D,0D,10D);
+        MeetingDto meetingDto = getMeetingDto(1L,"FirstMeeting","none",0L,0D,0D,10D);
         MeetingDto actual = meetingService.getMeetingByTitle("FirstMeeting");
 
         assertEquals(meetingDto, actual);
@@ -75,7 +78,7 @@ public class MeetingServiceTest {
     }
     @Test
     public void getById() {
-        MeetingDto meetingDto = getMeetingDto(1L,"FirstMeeting",0L,0D,0D,10D);
+        MeetingDto meetingDto = getMeetingDto(1L,"FirstMeeting","none",0L,0D,0D,10D);
         MeetingDto actual = meetingService.getMeetingById(1L);
 
         assertEquals(meetingDto, actual);
@@ -83,7 +86,7 @@ public class MeetingServiceTest {
     }
     @Test
     public void getAll() {
-        List<MeetingDto> meetingDtoList = List.of(getMeetingDto(1L,"FirstMeeting",0L,0D,0D,10D));
+        List<MeetingDto> meetingDtoList = List.of(getMeetingDto(1L,"FirstMeeting","none",0L,0D,0D,10D));
         List<MeetingDto> actual = meetingService.getAll();
 
         assertEquals(meetingDtoList, actual);
@@ -91,7 +94,7 @@ public class MeetingServiceTest {
     }
     @Test
     public void CreateOrUpdateMeeting() {
-        MeetingDto meetingDto= getMeetingDto(1L,"FirstMeeting",0L,0D,0D,10D);
+        MeetingDto meetingDto= getMeetingDto(1L,"FirstMeeting","none",0L,0D,0D,10D);
         MeetingDto actual = meetingService.createOrUpdateMeeting(meetingDto);
 
         assertEquals(1, meetingService.getAll().size());
@@ -100,10 +103,22 @@ public class MeetingServiceTest {
 
     @Test
     public void getGenerateMeetingsList() {
-        MeetingDto meetingDto = getMeetingDto(1L,"FirstMeeting",0L,0D,0D,10D);
+        MeetingDto meetingDto = getMeetingDto(1L,"FirstMeeting","none",0L,0D,0D,10D);
         List<MeetingDto> actual = meetingService.getGenerateMeetingsList(0L);
 
         assertEquals(List.of(meetingDto), actual);
 //        assertThrows(EntityNotFoundException.class, () -> meetingService.getMeetingById(ID_NO_EXIST));
     }
+//    @Test
+//    public void deleteMeetingById() {
+//        Meeting meeting = new Meeting("FirstMeeting","none",0L,0D,0D,10D);
+////        MeetingDto actual = meetingService.createOrUpdateMeeting(Optional.of(meetingDto));
+//        meetingRepository.save(meeting);
+//        meeting.setId(1L);
+//        when(meetingRepository.findById(1L)).thenReturn(Optional.of(meeting));
+//        doNothing().when(meetingRepository).deleteById(any());
+//        meetingService.deleteMeetingById(1L);
+////        System.out.println(meetingRepository.findByTitle("FirstMeeting").getId());
+//        verify(meetingRepository).deleteById(any());
+//    }
 }

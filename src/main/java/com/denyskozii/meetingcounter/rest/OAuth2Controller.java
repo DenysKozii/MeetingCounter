@@ -1,9 +1,10 @@
-package com.denyskozii.meetingcounter;
+package com.denyskozii.meetingcounter.rest;
+import com.denyskozii.meetingcounter.dto.ResponseStatus;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-public class Controller {
+public class OAuth2Controller {
 
     @GetMapping("/")
     public String helloWorld() {
@@ -16,7 +17,7 @@ public class Controller {
     }
 
     @GetMapping("/restricted")
-    public String restricted() {
-        return "if you see this you are logged in";
+    public ResponseStatus restricted() {
+        return new ResponseStatus(200,"login complete");
     }
 }
