@@ -38,7 +38,7 @@ public class UserRestController {
         this.meetingRepository = meetingRepository;
     }
 
-    @PostMapping("/{meetingId}/add")
+    @PostMapping("/add/{meetingId}")
     @PreAuthorize("hasAuthority('USER')")
     public ResponseStatus addToMeeting(@PathVariable long meetingId,
                                        @RequestParam Double longitude,
