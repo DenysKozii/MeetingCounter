@@ -22,7 +22,7 @@ public class MeetingRestController {
         this.meetingService = meetingService;
     }
 
-    @PostMapping("delete/{meetingId}")
+    @DeleteMapping("delete/{meetingId}")
     public ResponseStatus deleteMeeting(@PathVariable long meetingId) {
         log.info("Delete meeting");
         meetingService.deleteMeetingById(meetingId);
