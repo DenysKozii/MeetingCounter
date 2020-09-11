@@ -71,6 +71,7 @@ public class UserRestController {
 //            added = userService.addUserToMeeting(userId, createdMeeting.getId());
         return new ResponseStatus(HttpStatus.OK.value(),added ? "":"");
     }
+
     @GetMapping("/generateMeetings/{id}")
     @PreAuthorize("hasAuthority('USER')")
     public List<MeetingDto> generateMeetings(@PathVariable long id) {

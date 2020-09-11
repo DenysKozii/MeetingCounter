@@ -6,6 +6,8 @@ import com.denyskozii.meetingcounter.model.Meeting;
 import com.denyskozii.meetingcounter.repository.MeetingRepository;
 import com.denyskozii.meetingcounter.services.MeetingService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.HashOperations;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
@@ -20,6 +22,8 @@ import java.util.stream.Collectors;
 public class MeetingServiceImpl implements MeetingService {
 
     private MeetingRepository meetingRepository;
+
+
 
     @Autowired
     private Validator validator;

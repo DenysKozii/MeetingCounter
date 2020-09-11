@@ -15,8 +15,8 @@ public class MeetingCounterApplication {
     }
 
     @Bean
-    RedisTemplate<Integer, Integer> redisTemplate() {
-        RedisTemplate<Integer, Integer> redisTemplate = new RedisTemplate<>();
+    RedisTemplate<Long, Long> redisTemplate() {
+        RedisTemplate<Long, Long> redisTemplate = new RedisTemplate<>();
         redisTemplate.setConnectionFactory(jedisConnectionFactory());
         return redisTemplate;
     }

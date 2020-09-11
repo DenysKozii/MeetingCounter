@@ -10,6 +10,8 @@ import com.denyskozii.meetingcounter.model.User;
 import com.denyskozii.meetingcounter.repository.MeetingRepository;
 import com.denyskozii.meetingcounter.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.HashOperations;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -30,6 +32,10 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     UserRepository userRepository;
 
     MeetingRepository meetingRepository;
+
+    private RedisTemplate<Long, Long> redisTemplate;
+
+    private HashOperations hashOperations;
 
     @Autowired
     Validator validator;
@@ -122,10 +128,16 @@ public class UserServiceImpl implements UserService, UserDetailsService {
             User userNew = userRepository.getOne(userId);
             userNew.getMeetings().add(meetingNew);
             userRepository.save(userNew);
-            meetingRepository.increaseHereAmountByMeetingId(meetingId);
+//            meetingRepository.increaseHereAmountByMeetingId(meetingId);
+            increaseHereAmountByMeetingId(meetingId);
             return true;
         }
         return false;
+    }
+
+    private void increaseHereAmountByMeetingId(Long meetingId){
+        Long currentAmount = (Long)hashOperations.get("MEETING", meetingId);
+        hashOperations.put("MEETING", meetingId, currentAmount+1);
     }
 
     @Override
