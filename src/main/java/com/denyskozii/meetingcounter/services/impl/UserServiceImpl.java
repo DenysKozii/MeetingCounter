@@ -44,9 +44,10 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     PasswordEncoder passwordEncoder;
 
     @Autowired
-    public UserServiceImpl(UserRepository userRepository, MeetingRepository meetingRepository) {
+    public UserServiceImpl(UserRepository userRepository, MeetingRepository meetingRepository,RedisTemplate<Long, Long> redisTemplate) {
         this.userRepository = userRepository;
         this.meetingRepository = meetingRepository;
+        this.redisTemplate = redisTemplate;
     }
 
     @Override

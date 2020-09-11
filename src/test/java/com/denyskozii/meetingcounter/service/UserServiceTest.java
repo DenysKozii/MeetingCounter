@@ -14,6 +14,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockitoTestExecutionListener;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.test.context.TestExecutionListeners;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -29,12 +30,12 @@ public class UserServiceTest {
     UserRepository userRepository;
     @Mock
     MeetingRepository meetingRepository;
+    @Mock
+    RedisTemplate<Long, Long> redisTemplate;
 
     @BeforeEach
     public void setUp() {
-        userService = new UserServiceImpl(userRepository,meetingRepository);
-
-
+        userService = new UserServiceImpl(userRepository,meetingRepository,redisTemplate);
     }
 
     private UserDto getUserDto (Long id,
