@@ -50,6 +50,8 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         this.redisTemplate = redisTemplate;
     }
 
+
+    
     @Override
     public User loadUserByUsername(String email) throws UsernameNotFoundException {
         User user = userRepository.findByEmail(email);
@@ -135,6 +137,10 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         }
         return false;
     }
+
+    /**
+     * Using Redis for
+     */
 
     private void increaseHereAmountByMeetingId(Long meetingId){
         Long currentAmount = (Long)hashOperations.get("MEETING", meetingId);
