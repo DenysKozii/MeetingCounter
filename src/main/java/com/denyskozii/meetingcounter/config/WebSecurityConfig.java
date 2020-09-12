@@ -22,6 +22,7 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.core.annotation.Order;
 
 import java.util.Arrays;
+import java.util.Objects;
 
 @Configuration
 @EnableWebSecurity
@@ -81,5 +82,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         source.registerCorsConfiguration("/**", configuration);
         return source;
     }
+
 
 }

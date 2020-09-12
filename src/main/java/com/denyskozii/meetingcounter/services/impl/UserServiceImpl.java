@@ -118,28 +118,33 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     @Override
     public boolean addUserToMeeting(Long userId, Double longitude, Double latitude,Long meetingId) {
-        Optional<User> user = userRepository.findById(userId);
-        Optional<Meeting> meeting = meetingRepository.findById(meetingId);
-        Meeting meetingNew;
-        boolean availableDistance = false;
-        if(meeting.isPresent()) {
-            meetingNew = meetingRepository.getOne(meetingId);
-            availableDistance = distance(latitude, longitude,meetingNew.getLatitude(),meetingNew.getLongitude(),meetingNew.getAvailableDistance());
-        }
-        if(availableDistance && meeting.isPresent() && user.isPresent() && !user.get().getMeetings().contains(meeting.get())) {
-            meetingNew = meetingRepository.getOne(meetingId);
-            User userNew = userRepository.getOne(userId);
-            userNew.getMeetings().add(meetingNew);
-            userRepository.save(userNew);
-//            meetingRepository.increaseHereAmountByMeetingId(meetingId);
-            increaseHereAmountByMeetingId(meetingId);
-            return true;
+        Optional<User> userOptional = userRepository.findById(userId);
+        Optional<Meeting> meetingOptional = meetingRepository.findById(meetingId);
+        if(meetingOptional.isPresent()
+                && userOptional.isPresent()
+                && !userOptional.get().getMeetings().contains(meetingOptional.get())) {
+            Meeting meeting = meetingOptional.get();
+            boolean availableDistance = distance(
+                    latitude,
+                    longitude,
+                    meeting.getLatitude(),
+                    meeting.getLongitude(),
+                    meeting.getAvailableDistance());
+
+            if(availableDistance) {
+                User user = userOptional.get();
+                user.getMeetings().add(meeting);
+                userRepository.save(user);
+//              meetingRepository.increaseHereAmountByMeetingId(meetingId);
+                increaseHereAmountByMeetingId(meetingId);
+                return true;
+            }
         }
         return false;
     }
 
     /**
-     * Using Redis for
+     * Using Redis for increment amount of people on the meeting
      */
 
     private void increaseHereAmountByMeetingId(Long meetingId){
