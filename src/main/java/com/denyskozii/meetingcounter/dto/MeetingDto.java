@@ -30,4 +30,7 @@ public class MeetingDto {
     private Double latitude;
 
     private Double availableDistance;
+
+    private Integer zoom;
+
 }

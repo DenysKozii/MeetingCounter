@@ -59,7 +59,8 @@ public class MeetingServiceImpl implements MeetingService {
                     meetingDto.getHereAmount(),
                     meetingDto.getLongitude(),
                     meetingDto.getLatitude(),
-                    meetingDto.getAvailableDistance());
+                    meetingDto.getAvailableDistance(),
+                    meetingDto.getZoom());
             if (validator.validate(meeting).size() == 0) {
 //                return mapToMeetingDto.apply(meetingRepository.save(meeting));
                 meetingRepository.save(meeting);
@@ -126,6 +127,7 @@ public class MeetingServiceImpl implements MeetingService {
             .longitude(meeting.getLongitude())
             .latitude(meeting.getLatitude())
             .availableDistance(meeting.getAvailableDistance())
+            .zoom(meeting.getZoom())
             .build());
 
 }

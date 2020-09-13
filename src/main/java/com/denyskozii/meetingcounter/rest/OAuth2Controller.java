@@ -18,6 +18,7 @@ public class OAuth2Controller {
 
     @GetMapping("/restricted")
     public ResponseStatus restricted() {
+
         return new ResponseStatus(200,"login complete");
     }
 }

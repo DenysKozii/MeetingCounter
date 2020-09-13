@@ -46,6 +46,11 @@ public class Meeting {
     @Column(name = "availableDistance")
     private Double availableDistance;
 
+    @NonNull
+    @Column(name = "zoom")
+    private Integer zoom;
+
+
     @Column(name = "start_date", columnDefinition = "DATE")
     private LocalDate startDate;
 
