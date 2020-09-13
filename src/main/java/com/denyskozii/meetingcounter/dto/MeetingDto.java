@@ -30,13 +30,4 @@ public class MeetingDto {
     private Double latitude;
 
     private Double availableDistance;
-
-    public MeetingDto(String title,String description, Long hereAmount, Double longitude, Double latitude, Double availableDistance) {
-        this.title = title;
-        this.description = description;
-        this.hereAmount = hereAmount;
-        this.longitude = longitude;
-        this.latitude = latitude;
-        this.availableDistance = availableDistance;
-    }
 }

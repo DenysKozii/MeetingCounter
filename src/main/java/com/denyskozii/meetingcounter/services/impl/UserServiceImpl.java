@@ -29,29 +29,30 @@ import java.util.stream.Collectors;
 @Transactional
 public class UserServiceImpl implements UserService, UserDetailsService {
 
-    UserRepository userRepository;
+    private UserRepository userRepository;
 
-    MeetingRepository meetingRepository;
+    private MeetingRepository meetingRepository;
 
     private RedisTemplate<Long, Long> redisTemplate;
 
     private HashOperations hashOperations;
 
     @Autowired
-    Validator validator;
+    private Validator validator;
 
     @Autowired
-    PasswordEncoder passwordEncoder;
+    private PasswordEncoder passwordEncoder;
+
+    private final static String DELIMETER = " ";
 
     @Autowired
-    public UserServiceImpl(UserRepository userRepository, MeetingRepository meetingRepository,RedisTemplate<Long, Long> redisTemplate) {
+    public UserServiceImpl(UserRepository userRepository, MeetingRepository meetingRepository, RedisTemplate<Long, Long> redisTemplate) {
         this.userRepository = userRepository;
         this.meetingRepository = meetingRepository;
         this.redisTemplate = redisTemplate;
     }
 
 
-    
     @Override
     public User loadUserByUsername(String email) throws UsernameNotFoundException {
         User user = userRepository.findByEmail(email);
@@ -75,8 +76,8 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     public Long getUserIdByName(String userFullName) {
         return userRepository
                 .findByFirstNameAndLastName(
-                        userFullName.split(" ")[0],
-                        userFullName.split(" ")[1])
+                        userFullName.split(DELIMETER)[0],
+                        userFullName.split(DELIMETER)[1])
                 .getId();
     }
 
@@ -92,13 +93,15 @@ public class UserServiceImpl implements UserService, UserDetailsService {
      * Calculate distance between two points in latitude and longitude taking
      * into account height difference. If you are not interested in height
      * difference pass 0.0. Uses Haversine method as its base.
-     *
+     * <p>
      * latitudeUser, longitudeUser Start point latitudeMeeting, longitudeMeeting End point el1 Start altitude in meters
      * el2 End altitude in meters
+     *
      * @returns Distance in Meters
+     * @author Den
      */
     private boolean distance(double latitudeUser, double longitudeUser, double latitudeMeeting,
-                                  double longitudeMeeting, double meetingAvailableDistance) {
+                             double longitudeMeeting, double meetingAvailableDistance) {
 
         final int R = 6371; // Radius of the earth
 
@@ -112,15 +115,17 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
 //        double height = el1 - el2;
 //        distance = Math.pow(distance, 2) + Math.pow(height, 2);
-        return distance<=meetingAvailableDistance;
+        return distance <= meetingAvailableDistance;
 //        return Math.sqrt(distance);
     }
 
     @Override
-    public boolean addUserToMeeting(Long userId, Double longitude, Double latitude,Long meetingId) {
+    public boolean addUserToMeeting(Long userId, Double longitude, Double latitude, Long meetingId) {
         Optional<User> userOptional = userRepository.findById(userId);
         Optional<Meeting> meetingOptional = meetingRepository.findById(meetingId);
-        if(meetingOptional.isPresent()
+
+//        User user = userOptional.orElseThrow(()->new EntityNotFoundException());
+        if (meetingOptional.isPresent()
                 && userOptional.isPresent()
                 && !userOptional.get().getMeetings().contains(meetingOptional.get())) {
             Meeting meeting = meetingOptional.get();
@@ -131,7 +136,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
                     meeting.getLongitude(),
                     meeting.getAvailableDistance());
 
-            if(availableDistance) {
+            if (availableDistance) {
                 User user = userOptional.get();
                 user.getMeetings().add(meeting);
                 userRepository.save(user);
@@ -147,9 +152,9 @@ public class UserServiceImpl implements UserService, UserDetailsService {
      * Using Redis for increment amount of people on the meeting
      */
 
-    private void increaseHereAmountByMeetingId(Long meetingId){
-        Long currentAmount = (Long)hashOperations.get("MEETING", meetingId);
-        hashOperations.put("MEETING", meetingId, currentAmount+1);
+    private void increaseHereAmountByMeetingId(Long meetingId) {
+        Long currentAmount = (Long) hashOperations.get("MEETING", meetingId);
+        hashOperations.put("MEETING", meetingId, currentAmount + 1);
     }
 
     @Override

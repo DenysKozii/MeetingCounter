@@ -53,23 +53,16 @@ public class UserRestController {
 
     @PostMapping("/createMeeting")
     @PreAuthorize("hasAuthority('USER')")
-    public ResponseStatus createMeeting(@RequestParam String title,
-                                        @RequestParam String description,
-                                        @RequestParam Double longitude,
-                                        @RequestParam Double latitude,
-                                        @RequestParam Double availableDistance,
-                                        HttpServletRequest request) {
+    public ResponseStatus createMeeting(@RequestBody MeetingDto meetingDto/*,
+                                        HttpServletRequest request*/) {
         log.info("Create meeting");
-        boolean added = false;
-        String userFullName = request.getUserPrincipal().getName();
-        Long userId = userService.getUserIdByName(userFullName);
-
-        MeetingDto meetingDto = new MeetingDto(title,description,0L,longitude,latitude,availableDistance);
-        MeetingDto createdMeeting = meetingService.createOrUpdateMeeting(meetingDto);
+//        String userFullName = request.getUserPrincipal().getName();
+//        Long userId = userService.getUserIdByName(userFullName);
+        meetingService.createOrUpdateMeeting(meetingDto);
 
 //        if(!createdMeeting.equals(meetingDto))
 //            added = userService.addUserToMeeting(userId, createdMeeting.getId());
-        return new ResponseStatus(HttpStatus.OK.value(),added ? "":"");
+        return new ResponseStatus(HttpStatus.OK.value(),"");
     }
 
     @GetMapping("/generateMeetings/{id}")

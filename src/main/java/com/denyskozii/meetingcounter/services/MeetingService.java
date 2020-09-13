@@ -15,7 +15,7 @@ public interface MeetingService {
 
     void deleteMeetingById(Long id);
 
-    public boolean update(MeetingDto meetingDto);
+    boolean update(MeetingDto meetingDto);
 
     Long getHereAmountByMeeting(Long id);
 
