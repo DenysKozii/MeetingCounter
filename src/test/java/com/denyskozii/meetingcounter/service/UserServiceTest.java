@@ -35,7 +35,7 @@ public class UserServiceTest {
 
     @BeforeEach
     public void setUp() {
-        userService = new UserServiceImpl(userRepository,meetingRepository,redisTemplate);
+        userService = new UserServiceImpl(userRepository,meetingRepository/*,redisTemplate*/);
     }
 
     private UserDto getUserDto (Long id,

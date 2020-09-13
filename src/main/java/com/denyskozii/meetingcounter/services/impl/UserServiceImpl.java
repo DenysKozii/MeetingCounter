@@ -33,9 +33,9 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     private MeetingRepository meetingRepository;
 
-    private RedisTemplate<Long, Long> redisTemplate;
+//    private RedisTemplate<Long, Long> redisTemplate;
 
-    private HashOperations hashOperations;
+//    private HashOperations hashOperations;
 
     @Autowired
     private Validator validator;
@@ -46,10 +46,10 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     private final static String DELIMETER = " ";
 
     @Autowired
-    public UserServiceImpl(UserRepository userRepository, MeetingRepository meetingRepository, RedisTemplate<Long, Long> redisTemplate) {
+    public UserServiceImpl(UserRepository userRepository, MeetingRepository meetingRepository/*, RedisTemplate<Long, Long> redisTemplate*/) {
         this.userRepository = userRepository;
         this.meetingRepository = meetingRepository;
-        this.redisTemplate = redisTemplate;
+//        this.redisTemplate = redisTemplate;
     }
 
 
@@ -140,8 +140,8 @@ public class UserServiceImpl implements UserService, UserDetailsService {
                 User user = userOptional.get();
                 user.getMeetings().add(meeting);
                 userRepository.save(user);
-//              meetingRepository.increaseHereAmountByMeetingId(meetingId);
-                increaseHereAmountByMeetingId(meetingId);
+              meetingRepository.increaseHereAmountByMeetingId(meetingId);
+//                increaseHereAmountByMeetingId(meetingId);
                 return true;
             }
         }
@@ -152,10 +152,10 @@ public class UserServiceImpl implements UserService, UserDetailsService {
      * Using Redis for increment amount of people on the meeting
      */
 
-    private void increaseHereAmountByMeetingId(Long meetingId) {
-        Long currentAmount = (Long) hashOperations.get("MEETING", meetingId);
-        hashOperations.put("MEETING", meetingId, currentAmount + 1);
-    }
+//    private void increaseHereAmountByMeetingId(Long meetingId) {
+//        Long currentAmount = (Long) hashOperations.get("MEETING", meetingId);
+//        hashOperations.put("MEETING", meetingId, currentAmount + 1);
+//    }
 
     @Override
     public List<UserDto> getAllByMeetingId(Long meetingId) {
