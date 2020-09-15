@@ -37,6 +37,7 @@ public class MeetingRepositoryTest {
         meeting3.setTitle("Third");
         meetingRepository.save(meeting3);
 
+
         return new ArrayList<>() {{
             add(meeting1);
             add(meeting2);
@@ -45,8 +46,10 @@ public class MeetingRepositoryTest {
     }
     @Test
     public void testAdd() {
+        List<Meeting> expected2 = loadDb();
+
         Meeting expected = new Meeting();
-        expected.setTitle("NoFirst");
+        expected.setTitle("fourth");
         meetingRepository.save(expected);
         Meeting actual = meetingRepository.findById(1L).orElse(null);
 

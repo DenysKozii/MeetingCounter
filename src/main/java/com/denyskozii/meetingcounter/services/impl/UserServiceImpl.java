@@ -179,9 +179,19 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
-    public boolean login(String login, String password) {
-        User user = userRepository.findByEmailAndPassword(login, password);
-        return user != null;
+    public boolean login(String email, String password) {
+        User user = userRepository.findByEmailAndPassword(email, password);
+        if(user == null)
+            throw new EntityNotFoundException("User with email " + email + " not found");
+        return true;
+    }
+
+    @Override
+    public boolean login(String email, String firstName, String lastName) {
+        User user = userRepository.findByEmailAndFirstNameAndLastName(email, firstName,lastName);
+        if(user == null)
+            throw new EntityNotFoundException("User with email " + email + " not found");
+        return true;
     }
 
     @Override

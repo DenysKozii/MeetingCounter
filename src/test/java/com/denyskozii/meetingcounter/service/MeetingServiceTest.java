@@ -52,7 +52,8 @@ public class MeetingServiceTest {
                                       Long hereAmount,
                                       Double longitude,
                                       Double latitude,
-                                      Double availableDistance){
+                                      Double availableDistance,
+                                      Integer zoom){
         return MeetingDto.builder()
                 .id(id)
                 .title(title)
@@ -61,6 +62,7 @@ public class MeetingServiceTest {
                 .longitude(longitude)
                 .latitude(latitude)
                 .availableDistance(availableDistance)
+                .zoom(zoom)
                 .build();
     }
 
@@ -70,7 +72,7 @@ public class MeetingServiceTest {
     }
     @Test
     public void getByTitle() {
-        MeetingDto meetingDto = getMeetingDto(1L,"FirstMeeting","none",0L,0D,0D,10D);
+        MeetingDto meetingDto = getMeetingDto(1L,"FirstMeeting","none",0L,0D,0D,10D,12);
         MeetingDto actual = meetingService.getMeetingByTitle("FirstMeeting");
 
         assertEquals(meetingDto, actual);
@@ -78,7 +80,7 @@ public class MeetingServiceTest {
     }
     @Test
     public void getById() {
-        MeetingDto meetingDto = getMeetingDto(1L,"FirstMeeting","none",0L,0D,0D,10D);
+        MeetingDto meetingDto = getMeetingDto(1L,"FirstMeeting","none",0L,0D,0D,10D,12);
         MeetingDto actual = meetingService.getMeetingById(1L);
 
         assertEquals(meetingDto, actual);
@@ -86,7 +88,7 @@ public class MeetingServiceTest {
     }
     @Test
     public void getAll() {
-        List<MeetingDto> meetingDtoList = List.of(getMeetingDto(1L,"FirstMeeting","none",0L,0D,0D,10D));
+        List<MeetingDto> meetingDtoList = List.of(getMeetingDto(1L,"FirstMeeting","none",0L,0D,0D,10D,12));
         List<MeetingDto> actual = meetingService.getAll();
 
         assertEquals(meetingDtoList, actual);
@@ -94,7 +96,7 @@ public class MeetingServiceTest {
     }
     @Test
     public void CreateOrUpdateMeeting() {
-        MeetingDto meetingDto= getMeetingDto(1L,"FirstMeeting","none",0L,0D,0D,10D);
+        MeetingDto meetingDto= getMeetingDto(1L,"FirstMeeting","none",0L,0D,0D,10D,12);
         MeetingDto actual = meetingService.createOrUpdateMeeting(meetingDto);
 
         assertEquals(1, meetingService.getAll().size());
@@ -103,7 +105,7 @@ public class MeetingServiceTest {
 
     @Test
     public void getGenerateMeetingsList() {
-        MeetingDto meetingDto = getMeetingDto(1L,"FirstMeeting","none",0L,0D,0D,10D);
+        MeetingDto meetingDto = getMeetingDto(1L,"FirstMeeting","none",0L,0D,0D,10D,12);
         List<MeetingDto> actual = meetingService.getGenerateMeetingsList(0L);
 
         assertEquals(List.of(meetingDto), actual);

@@ -21,7 +21,9 @@ public interface UserService  {
 
     boolean removeFromMeeting(Long userId, Long meetingId);
 
-    boolean login(String login, String password);
+    boolean login(String email, String password);
+
+    boolean login(String email, String firstName,String lastName);
 
     boolean register(UserDto userDto);
 

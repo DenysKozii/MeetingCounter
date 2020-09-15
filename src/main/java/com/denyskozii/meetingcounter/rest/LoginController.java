@@ -28,4 +28,9 @@ public class LoginController {
         userService.login(email, password);
         return new TokenDto(jwtProvider.generateToken(email));
     }
+    @PostMapping("/google-login")
+    public TokenDto googleLoginPost(@RequestParam String email, @RequestParam String firstName, @RequestParam String lastName) {
+        userService.login(email,firstName,lastName);
+        return new TokenDto(jwtProvider.generateToken(email));
+    }
 }
