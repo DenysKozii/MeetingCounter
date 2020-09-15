@@ -140,7 +140,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
                 User user = userOptional.get();
                 user.getMeetings().add(meeting);
                 userRepository.save(user);
-              meetingRepository.increaseHereAmountByMeetingId(meetingId);
+                meetingRepository.increaseHereAmountByMeetingId(meetingId);
 //                increaseHereAmountByMeetingId(meetingId);
                 return true;
             }
@@ -156,7 +156,6 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 //        Long currentAmount = (Long) hashOperations.get("MEETING", meetingId);
 //        hashOperations.put("MEETING", meetingId, currentAmount + 1);
 //    }
-
     @Override
     public List<UserDto> getAllByMeetingId(Long meetingId) {
         return userRepository.getAllByMeetingId(meetingId).stream().map(mapToUserDto).collect(Collectors.toList());
@@ -181,23 +180,39 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     @Override
     public boolean login(String email, String password) {
         User user = userRepository.findByEmailAndPassword(email, password);
-        if(user == null)
+        if (user == null)
             throw new EntityNotFoundException("User with email " + email + " not found");
         return true;
     }
 
     @Override
     public boolean login(String email, String firstName, String lastName) {
-        User user = userRepository.findByEmailAndFirstNameAndLastName(email, firstName,lastName);
-        if(user == null)
-            throw new EntityNotFoundException("User with email " + email + " not found");
-        return true;
+        User user = userRepository.findByEmailAndFirstNameAndLastName(email, firstName, lastName);
+//            throw new EntityNotFoundException("User with email " + email + " not found");
+        return user != null;
     }
 
     @Override
     public boolean register(UserDto userDto) {
         User user = mapToUser.apply(userDto);
         User userEntity = userRepository.findByEmail(user.getEmail());
+        if (userEntity != null || validator.validate(user).size() != 0) {
+            return false;
+        }
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        userRepository.save(user);
+        return true;
+    }
+
+    @Override
+    public boolean register(String email, String firstName, String lastName) {
+        User user = new User();
+        user.setRole(Role.USER);
+        user.setEmail(email);
+        user.setFirstName(firstName);
+        user.setLastName(lastName);
+        user.setPassword("qwehdchqbprfvyqiperfvwq12323148");
+        User userEntity = userRepository.findByEmail(email);
         if (userEntity != null || validator.validate(user).size() != 0) {
             return false;
         }

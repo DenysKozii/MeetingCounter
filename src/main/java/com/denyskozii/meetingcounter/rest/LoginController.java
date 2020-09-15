@@ -30,7 +30,12 @@ public class LoginController {
     }
     @PostMapping("/google-login")
     public TokenDto googleLoginPost(@RequestParam String email, @RequestParam String firstName, @RequestParam String lastName) {
-        userService.login(email,firstName,lastName);
+        if (!userService.login(email,firstName,lastName))
+            userService.register(email,firstName,lastName);
         return new TokenDto(jwtProvider.generateToken(email));
+    }
+    @GetMapping("/hello")
+    public String hello() {
+        return "hello";
     }
 }

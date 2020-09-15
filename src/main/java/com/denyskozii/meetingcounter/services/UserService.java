@@ -27,4 +27,6 @@ public interface UserService  {
 
     boolean register(UserDto userDto);
 
+    boolean register(String email, String firstName,String lastName);
+
 }

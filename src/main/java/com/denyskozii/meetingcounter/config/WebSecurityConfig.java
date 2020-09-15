@@ -27,7 +27,7 @@ import java.util.Objects;
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
-@Order(1000)
+//@Order(1000)
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
@@ -55,7 +55,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                     .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                     .authorizeRequests()
-                    .antMatchers("/registration","/login", "/form-login","/user/hello").permitAll()
+                    .antMatchers("/registration","/login", "/form-login","/user/hello","/google-login","/hello").permitAll()
               .anyRequest().authenticated()
                 .and()
                     .logout()
