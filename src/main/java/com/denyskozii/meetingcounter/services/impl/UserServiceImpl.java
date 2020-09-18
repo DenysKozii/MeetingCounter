@@ -43,7 +43,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    private final static String DELIMETER = " ";
+    private final static String DELIMITER = " ";
 
     @Autowired
     public UserServiceImpl(UserRepository userRepository, MeetingRepository meetingRepository/*, RedisTemplate<Long, Long> redisTemplate*/) {
@@ -76,8 +76,8 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     public Long getUserIdByName(String userFullName) {
         return userRepository
                 .findByFirstNameAndLastName(
-                        userFullName.split(DELIMETER)[0],
-                        userFullName.split(DELIMETER)[1])
+                        userFullName.split(DELIMITER)[0],
+                        userFullName.split(DELIMITER)[1])
                 .getId();
     }
 
@@ -121,23 +121,19 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     @Override
     public boolean addUserToMeeting(Long userId, Double longitude, Double latitude, Long meetingId) {
-        Optional<User> userOptional = userRepository.findById(userId);
-        Optional<Meeting> meetingOptional = meetingRepository.findById(meetingId);
+        User user = userRepository.findById(userId)
+                .orElseThrow(()->new EntityNotFoundException("User with id " + userId + " not found"));
+        Meeting meeting = meetingRepository.findById(meetingId)
+                .orElseThrow(()->new EntityNotFoundException("Meeting with id " + meetingId + " not found"));
 
-//        User user = userOptional.orElseThrow(()->new EntityNotFoundException());
-        if (meetingOptional.isPresent()
-                && userOptional.isPresent()
-                && !userOptional.get().getMeetings().contains(meetingOptional.get())) {
-            Meeting meeting = meetingOptional.get();
+        if (!user.getMeetings().contains(meeting)) {
             boolean availableDistance = distance(
                     latitude,
                     longitude,
                     meeting.getLatitude(),
                     meeting.getLongitude(),
                     meeting.getAvailableDistance());
-
             if (availableDistance) {
-                User user = userOptional.get();
                 user.getMeetings().add(meeting);
                 userRepository.save(user);
                 meetingRepository.increaseHereAmountByMeetingId(meetingId);
