@@ -175,7 +175,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     @Override
     public boolean login(String email, String password) {
-        User user = userRepository.findByEmailAndPassword(email, password);
+        User user = userRepository.findByEmailAndPassword(email, passwordEncoder.encode(password));
         if (user == null)
             throw new EntityNotFoundException("User with email " + email + " not found");
         return true;
