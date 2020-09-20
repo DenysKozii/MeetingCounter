@@ -185,8 +185,8 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     @Override
     public boolean login(String email, String password) {
-        User user = userRepository.findByEmailAndPassword(email, password);
-//        User user = userRepository.findByEmail(email);
+//        User user = userRepository.findByEmailAndPassword(email, password);
+        User user = userRepository.findByEmail(email);
         System.out.println(password);
         System.out.println(user);
         System.out.println(userRepository.getAllByRole(Role.USER));
