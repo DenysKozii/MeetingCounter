@@ -1,6 +1,8 @@
 package com.denyskozii.meetingcounter.rest;
 
 
+import com.denyskozii.meetingcounter.dto.UserDto;
+import com.denyskozii.meetingcounter.dto.UserLoginDto;
 import com.denyskozii.meetingcounter.services.UserService;
 import com.denyskozii.meetingcounter.dto.ResponseStatus;
 import com.denyskozii.meetingcounter.dto.TokenDto;
@@ -36,9 +38,9 @@ public class LoginController {
     }
 
     @PostMapping("/login")
-    public TokenDto loginPost(@RequestParam String email, @RequestParam String password) {
-        userService.login(email, password);
-        return new TokenDto(jwtProvider.generateToken(email));
+    public TokenDto loginPost(@RequestBody UserLoginDto userLoginDto) {
+        userService.login(userLoginDto.getEmail(), userLoginDto.getPassword());
+        return new TokenDto(jwtProvider.generateToken(userLoginDto.getEmail()));
     }
 
     @PostMapping("/google-login")
