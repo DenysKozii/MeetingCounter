@@ -88,7 +88,7 @@ public class UserRestController {
 
     @GetMapping("/get-user")
     @PreAuthorize("hasAuthority('USER')")
-    public UserDto createMeeting(@PathVariable String email) {
+    public UserDto createMeeting(@RequestParam String email) {
         log.info("Getting user by email " + email);
         return userService.getUserByEmail(email);
     }
