@@ -49,9 +49,8 @@ public class MeetingServiceImpl implements MeetingService {
     }
 
     @Override
-    public MeetingDto createOrUpdateMeeting(MeetingDto meetingDto) {
+    public MeetingDto createOrUpdateMeeting(MeetingDto meetingDto) throws EntityNotFoundException{
         Meeting meeting = meetingRepository.findByTitle(meetingDto.getTitle());
-
 
         if (meeting == null) {
             meeting = new Meeting(meetingDto.getTitle(),
@@ -88,6 +87,7 @@ public class MeetingServiceImpl implements MeetingService {
         Meeting meeting = meetingRepository.findById(meetingDto.getId())
                 .orElseThrow(() -> new EntityNotFoundException("Meeting with id "
                         + meetingDto.getId() + " doesn't exists!"));
+
         if (meeting != null && !meeting.getTitle().equals(meetingDto.getTitle()) && meetingDto.getTitle().trim().length() != 0) {
             meeting.setTitle(meetingDto.getTitle());
             meetingRepository.save(meeting);
@@ -108,7 +108,8 @@ public class MeetingServiceImpl implements MeetingService {
 
     @Override
     public MeetingDto getMeetingByTitle(String title) {
-        return mapToMeetingDto.apply(meetingRepository.findByTitle(title));
+        Meeting meeting = meetingRepository.findByTitle(title);
+        return meeting == null ? null : mapToMeetingDto.apply(meeting);
     }
 
     @Override

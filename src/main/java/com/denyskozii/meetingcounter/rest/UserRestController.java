@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 @RestController
@@ -67,13 +69,13 @@ public class UserRestController {
 
     @GetMapping("/generateMeetings/{id}")
     @PreAuthorize("hasAuthority('USER')")
-    public List<MeetingDto> generateMeetings(@PathVariable long id) {
+    public List<MeetingDto> generateMeetings(@PathVariable long id,
+                                             @RequestParam String title) {
         log.info("Generate meetings");
-        return meetingService.getGenerateMeetingsList(id);
+        MeetingDto meetingDto = meetingService.getMeetingByTitle(title);
+
+        return meetingDto == null ? meetingService.getGenerateMeetingsList(id) : Collections.singletonList(meetingDto);
     }
-
-
-
 
 
     @GetMapping("/{meetingId}/here")
