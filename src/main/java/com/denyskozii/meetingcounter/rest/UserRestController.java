@@ -1,6 +1,7 @@
 package com.denyskozii.meetingcounter.rest;
 
 
+import com.denyskozii.meetingcounter.dto.UserDto;
 import lombok.extern.slf4j.Slf4j;
 import com.denyskozii.meetingcounter.dto.MeetingDto;
 import com.denyskozii.meetingcounter.dto.ResponseStatus;
@@ -83,6 +84,13 @@ public class UserRestController {
     public Long createMeeting(@PathVariable Long meetingId) {
         log.info("Getting here amount by meeting id " + meetingId);
         return meetingRepository.getOne(meetingId).getHereAmount();
+    }
+
+    @GetMapping("/get-user")
+    @PreAuthorize("hasAuthority('USER')")
+    public UserDto createMeeting(@PathVariable String email) {
+        log.info("Getting user by email " + email);
+        return userService.getUserByEmail(email);
     }
     @GetMapping("/hello")
     public String hello() {

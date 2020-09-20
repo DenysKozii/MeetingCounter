@@ -9,6 +9,8 @@ public interface UserService  {
 
     UserDto getUserById(Long id);
 
+    UserDto getUserByEmail(String email);
+
     Long getUserIdByName(String userFullName);
 
     List<UserDto> getAllByRole(String role);

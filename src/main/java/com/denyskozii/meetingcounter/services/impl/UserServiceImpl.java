@@ -73,6 +73,15 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
+    public UserDto getUserByEmail(String email) {
+        User user = userRepository.findByEmail(email);
+        if(user == null)
+            throw new EntityNotFoundException("User with email " + email + " doesn't exists!");
+        return mapToUserDto.apply(user);
+
+    }
+
+    @Override
     public Long getUserIdByName(String userFullName) {
         return userRepository
                 .findByFirstNameAndLastName(
@@ -173,11 +182,12 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         return false;
     }
 
+
     @Override
     public boolean login(String email, String password) {
-//        User user = userRepository.findByEmailAndPassword(email, passwordEncoder.encode(password));
-        User user = userRepository.findByEmail(email);
-        System.out.println(passwordEncoder.encode(password));
+        User user = userRepository.findByEmailAndPassword(email, password);
+//        User user = userRepository.findByEmail(email);
+        System.out.println(password);
         System.out.println(user);
         System.out.println(userRepository.getAllByRole(Role.USER));
         if (user == null)
