@@ -39,6 +39,8 @@ public class LoginController {
 
     @PostMapping("/login")
     public TokenDto loginPost(@RequestBody UserLoginDto userLoginDto) {
+        System.out.println(userLoginDto.getEmail());
+        System.out.println(userLoginDto.getPassword());
         userService.login(userLoginDto.getEmail(), userLoginDto.getPassword());
         return new TokenDto(jwtProvider.generateToken(userLoginDto.getEmail()));
     }
