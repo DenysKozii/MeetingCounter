@@ -29,9 +29,9 @@ import java.util.stream.Collectors;
 @Transactional
 public class UserServiceImpl implements UserService, UserDetailsService {
 
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
 
-    private MeetingRepository meetingRepository;
+    private final MeetingRepository meetingRepository;
 
 //    private RedisTemplate<Long, Long> redisTemplate;
 
@@ -185,14 +185,10 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     @Override
     public boolean login(String email, String password) {
-//        User user = userRepository.findByEmailAndPassword(email, password);
         User user = userRepository.findByEmail(email);
-        System.out.println(password);
-        System.out.println(user);
-        System.out.println(userRepository.getAllByRole(Role.USER));
         if (user == null)
             throw new EntityNotFoundException("User with email " + email + " not found");
-        return true;
+        return user.getPassword().equals(password);
     }
 
     @Override
