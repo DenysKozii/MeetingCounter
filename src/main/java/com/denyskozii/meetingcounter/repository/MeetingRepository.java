@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -31,5 +32,5 @@ public interface MeetingRepository extends JpaRepository<Meeting, Long> {
             "            WHERE ID BETWEEN :id and :id+20", nativeQuery = true)
     List<Meeting> getGenerateMeetingsList(Long id);
 
-    List<Meeting> getMeetingByUsers(List<User> users);
+    List<Meeting> getMeetingByUsers(User user);
 }

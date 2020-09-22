@@ -72,7 +72,7 @@ public class UserRestController {
     @GetMapping("/generateMeetings/{id}")
     public List<MeetingDto> generateMeetings(@PathVariable long id,
                                              @RequestParam String title) {
-        log.info("Generate meetings");
+        log.info("Generate meetings by id " + id);
         MeetingDto meetingDto = meetingService.getMeetingByTitle(title);
 
         return meetingDto == null ? meetingService.getGenerateMeetingsList(id) : Collections.singletonList(meetingDto);
@@ -98,7 +98,7 @@ public class UserRestController {
     @PreAuthorize("hasAuthority('USER')")
     public List<MeetingDto> getMeetingsByUser(HttpServletRequest request) {
         Long userIdByName = userService.getUserIdByName(request.getUserPrincipal().getName());
-//        log.info("Getting user by email " + email);
+        log.info("Getting meetings by user id " + userIdByName);
         return meetingService.getMeetingsByUserId(userIdByName);
     }
 
