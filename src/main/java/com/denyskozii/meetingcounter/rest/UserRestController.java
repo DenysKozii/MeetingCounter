@@ -23,6 +23,7 @@ import java.util.List;
 @RestController
 @Slf4j
 @RequestMapping(value = "/user")
+@CrossOrigin(origins = "*")
 public class UserRestController {
 
     private final UserService userService;
@@ -85,12 +86,21 @@ public class UserRestController {
 //        return meetingRepository.getOne(meetingId).getHereAmount();
 //    }
 
-    @GetMapping("/get-user")
+    @GetMapping("/getUser")
     @PreAuthorize("hasAuthority('USER')")
-    public UserDto createMeeting(@RequestParam String email) {
+    public UserDto getUser(HttpServletRequest request) {
+        Long userIdByName = userService.getUserIdByName(request.getUserPrincipal().getName());
+        log.info("Getting user by id " + userIdByName);
+        return userService.getUserById(userIdByName);
+    }
+    @GetMapping("/getMeetingsByUser")
+    @PreAuthorize("hasAuthority('USER')")
+    public UserDto getMeetingsByUser(@RequestParam String email) {
         log.info("Getting user by email " + email);
         return userService.getUserByEmail(email);
     }
+
+
     @GetMapping("/hello")
     public String hello() {
         return "hello";

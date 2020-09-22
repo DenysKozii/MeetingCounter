@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 @RestController
 @Slf4j
 @RequestMapping(value = "/meeting")
+@CrossOrigin(origins = "*")
 public class MeetingRestController {
 
     private final MeetingService meetingService;
