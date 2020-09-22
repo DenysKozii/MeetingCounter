@@ -69,7 +69,6 @@ public class UserRestController {
     }
 
     @GetMapping("/generateMeetings/{id}")
-    @PreAuthorize("hasAuthority('USER')")
     public List<MeetingDto> generateMeetings(@PathVariable long id,
                                              @RequestParam String title) {
         log.info("Generate meetings");
@@ -79,12 +78,12 @@ public class UserRestController {
     }
 
 
-    @GetMapping("/{meetingId}/here")
-    @PreAuthorize("hasAuthority('USER')")
-    public Long createMeeting(@PathVariable Long meetingId) {
-        log.info("Getting here amount by meeting id " + meetingId);
-        return meetingRepository.getOne(meetingId).getHereAmount();
-    }
+//    @GetMapping("/{meetingId}/here")
+//    @PreAuthorize("hasAuthority('USER')")
+//    public Long createMeeting(@PathVariable Long meetingId) {
+//        log.info("Getting here amount by meeting id " + meetingId);
+//        return meetingRepository.getOne(meetingId).getHereAmount();
+//    }
 
     @GetMapping("/get-user")
     @PreAuthorize("hasAuthority('USER')")

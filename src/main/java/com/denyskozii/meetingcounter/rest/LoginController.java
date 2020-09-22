@@ -1,7 +1,6 @@
 package com.denyskozii.meetingcounter.rest;
 
 
-import com.denyskozii.meetingcounter.dto.UserDto;
 import com.denyskozii.meetingcounter.dto.UserLoginDto;
 import com.denyskozii.meetingcounter.services.UserService;
 import com.denyskozii.meetingcounter.dto.ResponseStatus;
@@ -34,35 +33,41 @@ public class LoginController {
 
     @GetMapping("/form-login")
     public ResponseStatus login() {
-        return new ResponseStatus(200,"login complete");
+        return new ResponseStatus(200, "login complete");
     }
 
+//    @PostMapping("/login")
+//    public TokenDto loginPost(@RequestBody UserLoginDto userLoginDto)  {
+//        if(userService.login(userLoginDto.getEmail(), userLoginDto.getPassword()))
+//            return new TokenDto(jwtProvider.generateToken(userLoginDto.getEmail()));
+////        throw new Exception("21");
+//    }
+
     @PostMapping("/login")
-    public TokenDto loginPost(@RequestBody UserLoginDto userLoginDto) {
-        System.out.println(userLoginDto.getEmail());
-        System.out.println(userLoginDto.getPassword());
-        userService.login(userLoginDto.getEmail(), userLoginDto.getPassword());
-        return new TokenDto(jwtProvider.generateToken(userLoginDto.getEmail()));
+    public Object loginPost(@RequestBody UserLoginDto userLoginDto) {
+        if (userService.login(userLoginDto.getEmail(), userLoginDto.getPassword()))
+            return new ResponseStatus(200, new TokenDto(jwtProvider.generateToken(userLoginDto.getEmail())).toString());
+        return new ResponseStatus(409, "incorrect password");
     }
 
     @PostMapping("/google-login")
     public TokenDto googleLoginPost(@RequestParam String token) throws IOException {
         try (CloseableHttpClient client = HttpClientBuilder.create().build()) {
-            var request = new HttpGet("https://www.googleapis.com/oauth2/v3/tokeninfo?id_token="+token);
+            var request = new HttpGet("https://www.googleapis.com/oauth2/v3/tokeninfo?id_token=" + token);
             HttpResponse response = client.execute(request);
             var bufReader = new BufferedReader(new InputStreamReader(
                     response.getEntity().getContent()));
             String line;
             while ((line = bufReader.readLine()) != null) {
-                if(line.contains("given_name"))
-                    firstName = line.substring(17,line.length()-2);
-                if(line.contains("family_name"))
-                    lastName = line.substring(18,line.length()-2);
-                if(line.contains("email") && email == null)
-                    email = line.substring(12,line.length()-2);
+                if (line.contains("given_name"))
+                    firstName = line.substring(17, line.length() - 2);
+                if (line.contains("family_name"))
+                    lastName = line.substring(18, line.length() - 2);
+                if (line.contains("email") && email == null)
+                    email = line.substring(12, line.length() - 2);
             }
-            if (!userService.login(email,firstName,lastName))
-                userService.register(email,firstName,lastName);
+            if (!userService.login(email, firstName, lastName))
+                userService.register(email, firstName, lastName);
             return new TokenDto(jwtProvider.generateToken(email));
         }
     }
