@@ -128,7 +128,7 @@ public class MeetingServiceImpl implements MeetingService {
     @Override
     public List<MeetingDto> getMeetingsByUserId(Long id) {
         User user = userRepository.findById(id)
-                .orElseThrow(() -> new com.denyskozii.meetingcounter.exception.EntityNotFoundException("User with id " + id + " doesn't exists!"));
+                .orElseThrow(() -> new EntityNotFoundException("User with id " + id + " doesn't exists!"));
         return meetingRepository.getMeetingByUsers(user).stream()
                 .map(mapToMeetingDto)
                 .collect(Collectors.toList());
