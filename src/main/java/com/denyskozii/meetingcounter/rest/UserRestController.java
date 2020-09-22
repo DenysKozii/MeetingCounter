@@ -96,9 +96,10 @@ public class UserRestController {
 
     @GetMapping("/getMeetingsByUser")
     @PreAuthorize("hasAuthority('USER')")
-    public UserDto getMeetingsByUser(@RequestParam String email) {
-        log.info("Getting user by email " + email);
-        return userService.getUserByEmail(email);
+    public List<MeetingDto> getMeetingsByUser(HttpServletRequest request) {
+        Long userIdByName = userService.getUserIdByName(request.getUserPrincipal().getName());
+//        log.info("Getting user by email " + email);
+        return meetingService.getMeetingsByUserId(userIdByName);
     }
 
 

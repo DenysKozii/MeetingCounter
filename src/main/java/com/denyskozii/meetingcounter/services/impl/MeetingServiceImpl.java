@@ -1,6 +1,7 @@
 package com.denyskozii.meetingcounter.services.impl;
 
 import com.denyskozii.meetingcounter.dto.UserDto;
+import com.denyskozii.meetingcounter.model.User;
 import com.denyskozii.meetingcounter.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 import com.denyskozii.meetingcounter.dto.MeetingDto;
@@ -14,6 +15,9 @@ import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
 import javax.validation.Validator;
+import java.lang.reflect.Array;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
@@ -126,8 +130,11 @@ public class MeetingServiceImpl implements MeetingService {
 
     @Override
     public List<MeetingDto> getMeetingsByUserId(Long id) {
-
-        return null;
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new com.denyskozii.meetingcounter.exception.EntityNotFoundException("User with id " + id + " doesn't exists!"));
+        return meetingRepository.getMeetingByUsers(Collections.singletonList(user)).stream()
+                .map(mapToMeetingDto)
+                .collect(Collectors.toList());
     }
 
     Function<Meeting, MeetingDto> mapToMeetingDto = (meeting -> MeetingDto.builder()
