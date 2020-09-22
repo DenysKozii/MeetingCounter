@@ -1,6 +1,7 @@
 package com.denyskozii.meetingcounter.services;
 
 import com.denyskozii.meetingcounter.dto.MeetingDto;
+import com.denyskozii.meetingcounter.dto.UserDto;
 import com.denyskozii.meetingcounter.exception.EntityNotFoundException;
 
 import java.util.List;
@@ -22,4 +23,8 @@ public interface MeetingService {
     MeetingDto getMeetingByTitle(String title);
 
     List<MeetingDto> getGenerateMeetingsList(Long id);
+
+    List<MeetingDto> getMeetingsByUserId(Long id);
+
+
 }

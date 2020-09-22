@@ -1,5 +1,7 @@
 package com.denyskozii.meetingcounter.services.impl;
 
+import com.denyskozii.meetingcounter.dto.UserDto;
+import com.denyskozii.meetingcounter.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 import com.denyskozii.meetingcounter.dto.MeetingDto;
 import com.denyskozii.meetingcounter.model.Meeting;
@@ -21,7 +23,8 @@ import java.util.stream.Collectors;
 @Slf4j
 public class MeetingServiceImpl implements MeetingService {
 
-    private MeetingRepository meetingRepository;
+    private final MeetingRepository meetingRepository;
+    private final UserRepository userRepository;
 
 
 
@@ -30,8 +33,9 @@ public class MeetingServiceImpl implements MeetingService {
 
 
     @Autowired
-    public MeetingServiceImpl(MeetingRepository meetingRepository) {
+    public MeetingServiceImpl(MeetingRepository meetingRepository,UserRepository userRepository) {
         this.meetingRepository = meetingRepository;
+        this.userRepository = userRepository;
     }
 
     @Override
@@ -118,6 +122,12 @@ public class MeetingServiceImpl implements MeetingService {
                 .getGenerateMeetingsList(id).stream()
                 .map(mapToMeetingDto)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<MeetingDto> getMeetingsByUserId(Long id) {
+
+        return null;
     }
 
     Function<Meeting, MeetingDto> mapToMeetingDto = (meeting -> MeetingDto.builder()

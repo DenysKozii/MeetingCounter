@@ -44,14 +44,14 @@ public class LoginController {
 //    }
 
     @PostMapping("/login")
-    public Object loginPost(@RequestBody UserLoginDto userLoginDto) {
+    public ResponseStatus loginPost(@RequestBody UserLoginDto userLoginDto) {
         if (userService.login(userLoginDto.getEmail(), userLoginDto.getPassword()))
             return new ResponseStatus(200, new TokenDto(jwtProvider.generateToken(userLoginDto.getEmail())).toString());
         return new ResponseStatus(409, "incorrect password");
     }
 
     @PostMapping("/google-login")
-    public TokenDto googleLoginPost(@RequestParam String token) throws IOException {
+    public ResponseStatus googleLoginPost(@RequestParam String token) throws IOException {
         try (CloseableHttpClient client = HttpClientBuilder.create().build()) {
             var request = new HttpGet("https://www.googleapis.com/oauth2/v3/tokeninfo?id_token=" + token);
             HttpResponse response = client.execute(request);
@@ -68,7 +68,7 @@ public class LoginController {
             }
             if (!userService.login(email, firstName, lastName))
                 userService.register(email, firstName, lastName);
-            return new TokenDto(jwtProvider.generateToken(email));
+            return new ResponseStatus(200,new TokenDto(jwtProvider.generateToken(email)).toString());
         }
     }
 

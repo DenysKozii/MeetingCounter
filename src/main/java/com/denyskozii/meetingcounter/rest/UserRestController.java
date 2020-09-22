@@ -93,6 +93,7 @@ public class UserRestController {
         log.info("Getting user by id " + userIdByName);
         return userService.getUserById(userIdByName);
     }
+
     @GetMapping("/getMeetingsByUser")
     @PreAuthorize("hasAuthority('USER')")
     public UserDto getMeetingsByUser(@RequestParam String email) {

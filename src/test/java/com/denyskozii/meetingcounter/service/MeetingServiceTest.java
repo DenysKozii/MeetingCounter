@@ -5,6 +5,7 @@ import com.denyskozii.meetingcounter.dto.MeetingDto;
 import com.denyskozii.meetingcounter.exception.EntityNotFoundException;
 import com.denyskozii.meetingcounter.model.Meeting;
 import com.denyskozii.meetingcounter.repository.MeetingRepository;
+import com.denyskozii.meetingcounter.repository.UserRepository;
 import com.denyskozii.meetingcounter.services.MeetingService;
 import com.denyskozii.meetingcounter.services.impl.MeetingServiceImpl;
 import org.junit.jupiter.api.Assertions;
@@ -34,10 +35,12 @@ public class MeetingServiceTest {
 
     @Mock
     MeetingRepository meetingRepository;
+    @Mock
+    UserRepository userRepository;
 
     @BeforeEach
     public void setUp() {
-        meetingService = new MeetingServiceImpl(meetingRepository);
+        meetingService = new MeetingServiceImpl(meetingRepository, userRepository);
         Meeting meeting = new Meeting("FirstMeeting","none",0L,0D,0D,10D,12);
         meeting.setId(1L);
         doReturn(meeting).when(meetingRepository).findByTitle("FirstMeeting");
