@@ -36,7 +36,20 @@ public class UserRestController {
         String userFullName = request.getUserPrincipal().getName();
         Long userId = userService.getUserIdByName(userFullName);
         boolean added = userService.addUserToMeeting(userId, longitude, latitude, meetingId);
-        return new ResponseStatus(HttpStatus.OK.value(), added ? "user successfully added" : "user already added");
+        return new ResponseStatus(HttpStatus.OK.value(), added ? "user successfully added" : "user distance is incorrect");
+    }
+
+    @PostMapping("/checkAdd/{meetingId}")
+    @PreAuthorize("hasAuthority('USER')")
+    public boolean checkAddToMeeting(@PathVariable long meetingId,
+                                       @RequestParam Double longitude,
+                                       @RequestParam Double latitude,
+                                       HttpServletRequest request) {
+        log.info("Check if user added to meeting " + meetingId);
+        String userFullName = request.getUserPrincipal().getName();
+        Long userId = userService.getUserIdByName(userFullName);
+//        return new ResponseStatus(HttpStatus.OK.value(), added ? "user already added" : "user is not here");
+        return userService.checkUserAdded(userId, longitude, latitude, meetingId);
     }
 
     @GetMapping("/getUser")

@@ -16,6 +16,8 @@ public interface UserService  {
 
     boolean addUserToMeeting(Long userId, Double longitude, Double latitude, Long meetingId);
 
+    boolean checkUserAdded(Long userId, Double longitude, Double latitude, Long meetingId);
+
 //    List<UserDto> getAllByMeetingId(Long meetingId);
 //
 //    void delete(Long userId);

@@ -153,6 +153,15 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         return false;
     }
 
+    @Override
+    public boolean checkUserAdded(Long userId, Double longitude, Double latitude, Long meetingId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(()->new EntityNotFoundException("User with id " + userId + " not found"));
+        Meeting meeting = meetingRepository.findById(meetingId)
+                .orElseThrow(()->new EntityNotFoundException("Meeting with id " + meetingId + " not found"));
+        return user.getMeetings().contains(meeting);
+    }
+
     /**
      * Using Redis for increment amount of people on the meeting
      */

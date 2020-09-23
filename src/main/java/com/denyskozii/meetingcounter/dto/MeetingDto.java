@@ -34,8 +34,6 @@ public class MeetingDto {
 
     private Integer zoom;
 
-    private LocalDate startDate;
 
-    private LocalDate finishDate;
 
 }
