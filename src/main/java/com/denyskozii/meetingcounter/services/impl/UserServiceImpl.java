@@ -62,24 +62,24 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         return user;
     }
 
-    @Override
-    public List<UserDto> getAll() {
-        return userRepository.findAll().stream().map(mapToUserDto).collect(Collectors.toList());
-    }
+//    @Override
+//    public List<UserDto> getAll() {
+//        return userRepository.findAll().stream().map(mapToUserDto).collect(Collectors.toList());
+//    }
 
     @Override
     public UserDto getUserById(Long id) {
         return mapToUserDto.apply(userRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("User with id " + id + " doesn't exists!")));
     }
 
-    @Override
-    public UserDto getUserByEmail(String email) {
-        User user = userRepository.findByEmail(email);
-        if(user == null)
-            throw new EntityNotFoundException("User with email " + email + " doesn't exists!");
-        return mapToUserDto.apply(user);
-
-    }
+//    @Override
+//    public UserDto getUserByEmail(String email) {
+//        User user = userRepository.findByEmail(email);
+//        if(user == null)
+//            throw new EntityNotFoundException("User with email " + email + " doesn't exists!");
+//        return mapToUserDto.apply(user);
+//
+//    }
 
     @Override
     public Long getUserIdByName(String userFullName) {
@@ -90,13 +90,13 @@ public class UserServiceImpl implements UserService, UserDetailsService {
                 .getId();
     }
 
-    @Override
-    public List<UserDto> getAllByRole(String role) {
-        return userRepository.
-                getAllByRole(Role.valueOf(role.toUpperCase())).stream().
-                map(mapToUserDto).
-                collect(Collectors.toList());
-    }
+//    @Override
+//    public List<UserDto> getAllByRole(String role) {
+//        return userRepository.
+//                getAllByRole(Role.valueOf(role.toUpperCase())).stream().
+//                map(mapToUserDto).
+//                collect(Collectors.toList());
+//    }
 
     /**
      * Calculate distance between two points in latitude and longitude taking
@@ -161,26 +161,26 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 //        Long currentAmount = (Long) hashOperations.get("MEETING", meetingId);
 //        hashOperations.put("MEETING", meetingId, currentAmount + 1);
 //    }
-    @Override
-    public List<UserDto> getAllByMeetingId(Long meetingId) {
-        return userRepository.getAllByMeetingId(meetingId).stream().map(mapToUserDto).collect(Collectors.toList());
-    }
-
-    @Override
-    public void delete(Long userId) {
-        userRepository.delete(mapToUser.apply(getUserById(userId)));
-    }
-
-    @Override
-    public boolean removeFromMeeting(Long userId, Long meetingId) {
-        if (userRepository.findById(userId).isPresent()) {
-            User user = userRepository.getOne(userId);
-            user.getMeetings().remove((meetingRepository.findById(meetingId).orElseThrow(() -> new EntityNotFoundException("Meeting with id " + meetingId + " doesn't exists!"))));
-            userRepository.save(user);
-            return true;
-        }
-        return false;
-    }
+//    @Override
+//    public List<UserDto> getAllByMeetingId(Long meetingId) {
+//        return userRepository.getAllByMeetingId(meetingId).stream().map(mapToUserDto).collect(Collectors.toList());
+//    }
+//
+//    @Override
+//    public void delete(Long userId) {
+//        userRepository.delete(mapToUser.apply(getUserById(userId)));
+//    }
+//
+//    @Override
+//    public boolean removeFromMeeting(Long userId, Long meetingId) {
+//        if (userRepository.findById(userId).isPresent()) {
+//            User user = userRepository.getOne(userId);
+//            user.getMeetings().remove((meetingRepository.findById(meetingId).orElseThrow(() -> new EntityNotFoundException("Meeting with id " + meetingId + " doesn't exists!"))));
+//            userRepository.save(user);
+//            return true;
+//        }
+//        return false;
+//    }
 
 
     @Override

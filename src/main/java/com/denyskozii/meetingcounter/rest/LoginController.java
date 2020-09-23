@@ -6,6 +6,7 @@ import com.denyskozii.meetingcounter.services.UserService;
 import com.denyskozii.meetingcounter.dto.ResponseStatus;
 import com.denyskozii.meetingcounter.dto.TokenDto;
 import com.denyskozii.meetingcounter.jwt.JwtProvider;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.apache.http.HttpResponse;
@@ -18,6 +19,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 
 @RestController
+@Slf4j
 @CrossOrigin(origins = "*")
 public class LoginController {
 
@@ -38,9 +40,10 @@ public class LoginController {
 
     @PostMapping("/login")
     public ResponseStatus loginPost(@RequestBody UserLoginDto userLoginDto) {
+        log.info("login " + userLoginDto);
         if (userService.login(userLoginDto.getEmail(), userLoginDto.getPassword()))
             return new ResponseStatus(200, new TokenDto(jwtProvider.generateToken(userLoginDto.getEmail())).toString());
-        return new ResponseStatus(409, "incorrect password");
+        return new ResponseStatus(409, "some problems in login");
     }
 
     @PostMapping("/google-login")
@@ -59,6 +62,7 @@ public class LoginController {
                 if (line.contains("email") && email == null)
                     email = line.substring(12, line.length() - 2);
             }
+            log.info("Google login for " + email);
             if (!userService.login(email, firstName, lastName))
                 userService.register(email, firstName, lastName);
             return new ResponseStatus(200,new TokenDto(jwtProvider.generateToken(email)).toString());

@@ -46,13 +46,10 @@ public class MeetingRepositoryTest {
     }
     @Test
     public void testAdd() {
-        List<Meeting> expected2 = loadDb();
-
         Meeting expected = new Meeting();
-        expected.setTitle("fourth");
+        expected.setTitle("Expected");
         meetingRepository.save(expected);
         Meeting actual = meetingRepository.findById(1L).orElse(null);
-
         Assertions.assertEquals(expected, actual);
     }
 

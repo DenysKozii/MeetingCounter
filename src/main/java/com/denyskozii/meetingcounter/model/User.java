@@ -1,9 +1,6 @@
 package com.denyskozii.meetingcounter.model;
 
-import lombok.Data;
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -17,7 +14,9 @@ import java.util.*;
 @Entity
 @Data
 @Table(name = "user")
+@NoArgsConstructor
 @RequiredArgsConstructor
+@AllArgsConstructor
 public class User implements UserDetails {
 
     @Id
@@ -65,8 +64,6 @@ public class User implements UserDetails {
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "meeting_id"))
     private List<Meeting> meetings = new ArrayList<>();
-
-    public User() {}
 
     @Override
     public boolean equals(Object o) {

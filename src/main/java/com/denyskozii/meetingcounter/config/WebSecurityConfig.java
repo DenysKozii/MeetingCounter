@@ -27,7 +27,6 @@ import java.util.Objects;
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
-//@Order(1000)
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired

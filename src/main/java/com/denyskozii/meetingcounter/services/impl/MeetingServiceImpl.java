@@ -87,29 +87,29 @@ public class MeetingServiceImpl implements MeetingService {
 //        return mapToMeetingDto.apply(meetingRepository.save(meeting));
 //    }
 
-    @Override
-    public boolean update(MeetingDto meetingDto) {
-        Meeting meeting = meetingRepository.findById(meetingDto.getId())
-                .orElseThrow(() -> new EntityNotFoundException("Meeting with id "
-                        + meetingDto.getId() + " doesn't exists!"));
+//    @Override
+//    public boolean update(MeetingDto meetingDto) {
+//        Meeting meeting = meetingRepository.findById(meetingDto.getId())
+//                .orElseThrow(() -> new EntityNotFoundException("Meeting with id "
+//                        + meetingDto.getId() + " doesn't exists!"));
+//
+//        if (meeting != null && !meeting.getTitle().equals(meetingDto.getTitle()) && meetingDto.getTitle().trim().length() != 0) {
+//            meeting.setTitle(meetingDto.getTitle());
+//            meetingRepository.save(meeting);
+//            return true;
+//        }
+//        return false;
+//    }
 
-        if (meeting != null && !meeting.getTitle().equals(meetingDto.getTitle()) && meetingDto.getTitle().trim().length() != 0) {
-            meeting.setTitle(meetingDto.getTitle());
-            meetingRepository.save(meeting);
-            return true;
-        }
-        return false;
-    }
-
-    @Override
-    public void deleteMeetingById(Long id) {
-        meetingRepository.delete(meetingRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Meeting with id " + id + " doesn't exists!")));
-    }
-    @Override
-    public Long getHereAmountByMeeting(Long id) {
-        return meetingRepository.findHereAmountByMeetingId(id);
-    }
+//    @Override
+//    public void deleteMeetingById(Long id) {
+//        meetingRepository.delete(meetingRepository.findById(id)
+//                .orElseThrow(() -> new EntityNotFoundException("Meeting with id " + id + " doesn't exists!")));
+//    }
+//    @Override
+//    public Long getHereAmountByMeeting(Long id) {
+//        return meetingRepository.findHereAmountByMeetingId(id);
+//    }
 
     @Override
     public MeetingDto getMeetingByTitle(String title) {

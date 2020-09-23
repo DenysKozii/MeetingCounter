@@ -2,6 +2,8 @@ package com.denyskozii.meetingcounter.service;
 
 import com.denyskozii.meetingcounter.dto.MeetingDto;
 import com.denyskozii.meetingcounter.dto.UserDto;
+import com.denyskozii.meetingcounter.model.Role;
+import com.denyskozii.meetingcounter.model.User;
 import com.denyskozii.meetingcounter.repository.MeetingRepository;
 import com.denyskozii.meetingcounter.repository.UserRepository;
 import com.denyskozii.meetingcounter.services.MeetingService;
@@ -16,6 +18,12 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockitoTestExecutionListener;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.test.context.TestExecutionListeners;
+
+import java.sql.Date;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Optional;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.doReturn;
@@ -36,6 +44,9 @@ public class UserServiceTest {
     @BeforeEach
     public void setUp() {
         userService = new UserServiceImpl(userRepository,meetingRepository/*,redisTemplate*/);
+        User user = new User(1L,"Denys", "Kozii","denys.kozii@gmail.com","123123","123123", Role.USER, Date.valueOf(LocalDate.now()),new ArrayList<>());
+        doReturn(Optional.of(user)).when(userRepository).findById(1L);
+        doReturn(user).when(userRepository).findByFirstNameAndLastName("Denys", "Kozii");
     }
 
     private UserDto getUserDto (Long id,
@@ -55,5 +66,18 @@ public class UserServiceTest {
     @Test
     void test() {
         assertEquals(1, 1);
+    }
+
+    @Test
+    public void getById() {
+        UserDto userDto = getUserDto(1L,"Denys","Kozii","denys.kozii@gmail.com","123123");
+        UserDto actual = userService.getUserById(1L);
+
+        assertEquals(userDto, actual);
+    }
+    @Test
+    public void getUserIdByName() {
+        Long actual = userService.getUserIdByName("Denys Kozii");
+        assertEquals(1L, actual);
     }
 }

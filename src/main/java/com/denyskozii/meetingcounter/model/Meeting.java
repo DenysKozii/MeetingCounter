@@ -21,7 +21,6 @@ public class Meeting {
     private Long id;
 
     @NonNull
-    @UniqueElements
     @NotBlank(message = "Must not be blank")
     @Column(name = "title")
     private String title;

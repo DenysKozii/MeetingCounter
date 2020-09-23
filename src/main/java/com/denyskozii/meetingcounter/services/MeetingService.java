@@ -14,11 +14,11 @@ public interface MeetingService {
 
     MeetingDto getMeetingById(Long id) throws EntityNotFoundException;
 
-    void deleteMeetingById(Long id);
-
-    boolean update(MeetingDto meetingDto);
-
-    Long getHereAmountByMeeting(Long id);
+//    void deleteMeetingById(Long id);
+//
+//    boolean update(MeetingDto meetingDto);
+//
+//    Long getHereAmountByMeeting(Long id);
 
     MeetingDto getMeetingByTitle(String title);
 

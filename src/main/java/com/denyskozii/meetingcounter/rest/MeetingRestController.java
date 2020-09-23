@@ -17,8 +17,8 @@ import java.util.List;
 
 @RestController
 @Slf4j
-@RequestMapping(value = "/meeting")
 @CrossOrigin(origins = "*")
+@RequestMapping(value = "/meeting")
 public class MeetingRestController {
 
     private final MeetingService meetingService;
@@ -34,7 +34,7 @@ public class MeetingRestController {
     @PreAuthorize("hasAuthority('USER')")
     public List<MeetingDto> getMeetingsByUser(HttpServletRequest request) {
         Long userIdByName = userService.getUserIdByName(request.getUserPrincipal().getName());
-        log.info("Getting meetings by user id " + userIdByName);
+        log.info("Get meetings by user id " + userIdByName);
         return meetingService.getMeetingsByUserId(userIdByName);
     }
 

@@ -13,9 +13,7 @@ import java.util.Optional;
 
 public interface MeetingRepository extends JpaRepository<Meeting, Long> {
     Meeting findByTitle(String title);
-//    Meeting findByTitle(String title);
 
-    //    Meeting findById(Long id);
     @Query(value = "SELECT M.hereAmount FROM meetings " +
             " WHERE M.ID = :id", nativeQuery = true)
     Long findHereAmountByMeetingId(Long id);
