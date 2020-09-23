@@ -28,18 +28,12 @@ public class UserRestController {
 
     private final UserService userService;
     private final MeetingService meetingService;
-    private final UserRepository userRepository;
-    private final MeetingRepository meetingRepository;
 
     @Autowired
     public UserRestController(UserService userService,
-                              MeetingService meetingService,
-                              UserRepository userRepository,
-                              MeetingRepository meetingRepository) {
+                              MeetingService meetingService) {
         this.userService = userService;
         this.meetingService = meetingService;
-        this.userRepository = userRepository;
-        this.meetingRepository = meetingRepository;
     }
 
     @PostMapping("/add/{meetingId}")
@@ -55,53 +49,13 @@ public class UserRestController {
         return new ResponseStatus(HttpStatus.OK.value(), added ? "user successfully added" : "user already added");
     }
 
-    @PostMapping("/createMeeting")
-    @PreAuthorize("hasAuthority('USER')")
-    public ResponseStatus createMeeting(@RequestBody MeetingDto meetingDto/*,
-                                        HttpServletRequest request*/) {
-        log.info("Create meeting");
-//        String userFullName = request.getUserPrincipal().getName();
-//        Long userId = userService.getUserIdByName(userFullName);
-        meetingService.createOrUpdateMeeting(meetingDto);
-
-//        if(!createdMeeting.equals(meetingDto))
-//            added = userService.addUserToMeeting(userId, createdMeeting.getId());
-        return new ResponseStatus(HttpStatus.OK.value(),"");
-    }
-
-    @GetMapping("/generateMeetings/{id}")
-    public List<MeetingDto> generateMeetings(@PathVariable long id,
-                                             @RequestParam String title) {
-        log.info("Generate meetings by id " + id);
-        MeetingDto meetingDto = meetingService.getMeetingByTitle(title);
-
-        return meetingDto == null ? meetingService.getGenerateMeetingsList(id) : Collections.singletonList(meetingDto);
-    }
-
-
-//    @GetMapping("/{meetingId}/here")
-//    @PreAuthorize("hasAuthority('USER')")
-//    public Long createMeeting(@PathVariable Long meetingId) {
-//        log.info("Getting here amount by meeting id " + meetingId);
-//        return meetingRepository.getOne(meetingId).getHereAmount();
-//    }
-
     @GetMapping("/getUser")
     @PreAuthorize("hasAuthority('USER')")
     public UserDto getUser(HttpServletRequest request) {
         Long userIdByName = userService.getUserIdByName(request.getUserPrincipal().getName());
-        log.info("Getting user by id " + userIdByName);
+        log.info("Get user by id " + userIdByName);
         return userService.getUserById(userIdByName);
     }
-
-    @GetMapping("/getMeetingsByUser")
-    @PreAuthorize("hasAuthority('USER')")
-    public List<MeetingDto> getMeetingsByUser(HttpServletRequest request) {
-        Long userIdByName = userService.getUserIdByName(request.getUserPrincipal().getName());
-        log.info("Getting meetings by user id " + userIdByName);
-        return meetingService.getMeetingsByUserId(userIdByName);
-    }
-
 
     @GetMapping("/hello")
     public String hello() {

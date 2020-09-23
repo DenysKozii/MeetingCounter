@@ -36,13 +36,6 @@ public class LoginController {
         return new ResponseStatus(200, "login complete");
     }
 
-//    @PostMapping("/login")
-//    public TokenDto loginPost(@RequestBody UserLoginDto userLoginDto)  {
-//        if(userService.login(userLoginDto.getEmail(), userLoginDto.getPassword()))
-//            return new TokenDto(jwtProvider.generateToken(userLoginDto.getEmail()));
-////        throw new Exception("21");
-//    }
-
     @PostMapping("/login")
     public ResponseStatus loginPost(@RequestBody UserLoginDto userLoginDto) {
         if (userService.login(userLoginDto.getEmail(), userLoginDto.getPassword()))
