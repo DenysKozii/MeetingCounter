@@ -7,6 +7,7 @@ import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.*;
 
 import javax.persistence.Column;
+import java.time.LocalDate;
 
 @Data
 @Builder
@@ -32,5 +33,9 @@ public class MeetingDto {
     private Double availableDistance;
 
     private Integer zoom;
+
+    private LocalDate startDate;
+
+    private LocalDate finishDate;
 
 }
