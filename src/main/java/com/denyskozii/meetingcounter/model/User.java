@@ -59,6 +59,12 @@ public class User implements UserDetails {
     @Enumerated(EnumType.STRING)
     private Role role;
 
+//    @NonNull
+//    @NotNull
+//    @Enumerated(EnumType.STRING)
+//    private PasswordType passwordType = PasswordType.WITH_PASSWORD;
+
+
     @Transient
     private Date expirationDate;
 
@@ -80,6 +86,7 @@ public class User implements UserDetails {
                 Objects.equals(lastName, user.lastName) &&
                 Objects.equals(password, user.password) &&
                 role == user.role;
+
     }
 
     @Override

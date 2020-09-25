@@ -11,6 +11,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.HashMap;
 
 /**
  * Date: 07.09.2020
@@ -37,13 +38,14 @@ public class UserRestController {
     @PostMapping("/add/{meetingId}")
     @PreAuthorize("hasAuthority('USER')")
     public ResponseStatus addToMeeting(@PathVariable long meetingId,
-                                       @RequestParam Double longitude,
-                                       @RequestParam Double latitude,
+//                                       @RequestParam Double longitude,
+//                                       @RequestParam Double latitude,
+                                       @RequestBody HashMap<String, Double> coordinates,
                                        HttpServletRequest request) {
         log.info("Add user to meeting " + meetingId);
         String userFullName = request.getUserPrincipal().getName();
         Long userId = userService.getUserIdByName(userFullName);
-        boolean added = userService.addUserToMeeting(userId, longitude, latitude, meetingId);
+        boolean added = userService.addUserToMeeting(userId, coordinates.get("longitude"), coordinates.get("latitude"), meetingId);
         return new ResponseStatus(HttpStatus.OK.value(), added ? "user successfully added" : "user distance is incorrect");
     }
 
@@ -54,14 +56,15 @@ public class UserRestController {
     @PostMapping("/checkAdd/{meetingId}")
     @PreAuthorize("hasAuthority('USER')")
     public boolean checkAddToMeeting(@PathVariable long meetingId,
-                                       @RequestParam Double longitude,
-                                       @RequestParam Double latitude,
-                                       HttpServletRequest request) {
+//                                       @RequestParam Double longitude,
+//                                       @RequestParam Double latitude,
+                                     @RequestBody HashMap<String, Double> coordinates,
+                                     HttpServletRequest request) {
         log.info("Check if user added to meeting " + meetingId);
         String userFullName = request.getUserPrincipal().getName();
         Long userId = userService.getUserIdByName(userFullName);
 //        return new ResponseStatus(HttpStatus.OK.value(), added ? "user already added" : "user is not here");
-        return userService.checkUserAdded(userId, longitude, latitude, meetingId);
+        return userService.checkUserAdded(userId, coordinates.get("longitude"), coordinates.get("latitude"), meetingId);
     }
 
 

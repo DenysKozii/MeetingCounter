@@ -1,5 +1,6 @@
 package com.denyskozii.meetingcounter.services.impl;
 
+//import com.denyskozii.meetingcounter.model.PasswordType;
 import com.denyskozii.meetingcounter.services.UserService;
 import lombok.extern.slf4j.Slf4j;
 import com.denyskozii.meetingcounter.dto.UserDto;
@@ -210,16 +211,16 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     public boolean login(String email, String firstName, String lastName) {
         User user = userRepository.findByEmailAndFirstNameAndLastName(email, firstName, lastName);
 //            throw new EntityNotFoundException("User with email " + email + " not found");
-        return user != null;
+        return user != null /*&& user.getPasswordType().equals(PasswordType.WITHOUT_PASSWORD)*/;
     }
 
     @Override
     public boolean register(UserDto userDto) {
         User user = mapToUser.apply(userDto);
+//        user.setPasswordType(PasswordType.WITH_PASSWORD);
         User userEntity = userRepository.findByEmail(user.getEmail());
-        if (userEntity != null || validator.validate(user).size() != 0) {
+        if (userEntity != null || validator.validate(user).size() != 0)
             return false;
-        }
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         userRepository.save(user);
         return true;
@@ -232,12 +233,11 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         user.setEmail(email);
         user.setFirstName(firstName);
         user.setLastName(lastName);
-        user.setPassword("qwehdchqbprfvyqiperfvwq12323148");
+//        user.setPasswordType(PasswordType.WITHOUT_PASSWORD);
         User userEntity = userRepository.findByEmail(email);
         if (userEntity != null || validator.validate(user).size() != 0) {
             return false;
         }
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
         userRepository.save(user);
         return true;
     }
