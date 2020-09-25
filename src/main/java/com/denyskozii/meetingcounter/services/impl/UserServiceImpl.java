@@ -234,10 +234,12 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         user.setFirstName(firstName);
         user.setLastName(lastName);
 //        user.setPasswordType(PasswordType.WITHOUT_PASSWORD);
+        user.setPassword("qwehdchqbprfvyqiperfvwq12323148");
         User userEntity = userRepository.findByEmail(email);
         if (userEntity != null || validator.validate(user).size() != 0) {
             return false;
         }
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         userRepository.save(user);
         return true;
     }
