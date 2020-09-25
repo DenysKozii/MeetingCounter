@@ -23,7 +23,11 @@ import org.springframework.core.annotation.Order;
 
 import java.util.Arrays;
 import java.util.Objects;
-
+/**
+ * Date: 07.09.2020
+ *
+ * @author Denys Kozii
+ */
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)

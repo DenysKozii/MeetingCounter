@@ -4,7 +4,11 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
-
+/**
+ * Date: 07.09.2020
+ *
+ * @author Denys Kozii
+ */
 @Data
 @AllArgsConstructor
 @RequiredArgsConstructor

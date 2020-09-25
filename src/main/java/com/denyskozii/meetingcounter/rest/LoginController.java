@@ -17,7 +17,11 @@ import org.apache.http.impl.client.HttpClientBuilder;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-
+/**
+ * Date: 07.09.2020
+ *
+ * @author Denys Kozii
+ */
 @RestController
 @Slf4j
 @CrossOrigin(origins = "*")
@@ -38,6 +42,9 @@ public class LoginController {
         return new ResponseStatus(200, "login complete");
     }
 
+    /**
+     * login user by Dto
+     */
     @PostMapping("/login")
     public ResponseStatus loginPost(@RequestBody UserLoginDto userLoginDto) {
         log.info("login " + userLoginDto);
@@ -46,6 +53,9 @@ public class LoginController {
         return new ResponseStatus(409, "some problems in login");
     }
 
+    /**
+     * login user from Google auth with token.
+     */
     @PostMapping("/google-login")
     public ResponseStatus googleLoginPost(@RequestParam String token) throws IOException {
         try (CloseableHttpClient client = HttpClientBuilder.create().build()) {
@@ -69,6 +79,9 @@ public class LoginController {
         }
     }
 
+    /**
+     * test connection.
+     */
     @GetMapping("/hello")
     public String hello() {
         return "hello";

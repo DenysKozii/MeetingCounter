@@ -14,7 +14,11 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Collections;
 import java.util.List;
-
+/**
+ * Date: 07.09.2020
+ *
+ * @author Denys Kozii
+ */
 @RestController
 @Slf4j
 @CrossOrigin(origins = "*")
@@ -30,6 +34,9 @@ public class MeetingRestController {
         this.userService = userService;
     }
 
+    /**
+     * return all meeting from concrete user.
+     */
     @GetMapping("/getByUser")
     @PreAuthorize("hasAuthority('USER')")
     public List<MeetingDto> getMeetingsByUser(HttpServletRequest request) {
@@ -38,6 +45,9 @@ public class MeetingRestController {
         return meetingService.getMeetingsByUserId(userIdByName);
     }
 
+    /**
+     * return 20 meetings from id for main list on the website.
+     */
     @GetMapping("/generate/{id}")
     public List<MeetingDto> generateMeetings(@PathVariable long id,
                                              @RequestParam String title) {
@@ -46,6 +56,9 @@ public class MeetingRestController {
         return meetingDto == null ? meetingService.getGenerateMeetingsList(id) : Collections.singletonList(meetingDto);
     }
 
+    /**
+     * create new meeting by Dto.
+     */
     @PostMapping("/create")
     @PreAuthorize("hasAuthority('USER')")
     public ResponseStatus createMeeting(@RequestBody MeetingDto meetingDto) {

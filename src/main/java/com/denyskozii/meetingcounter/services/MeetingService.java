@@ -5,7 +5,11 @@ import com.denyskozii.meetingcounter.dto.UserDto;
 import com.denyskozii.meetingcounter.exception.EntityNotFoundException;
 
 import java.util.List;
-
+/**
+ * Date: 07.09.2020
+ *
+ * @author Denys Kozii
+ */
 public interface MeetingService {
     MeetingDto createOrUpdateMeeting(MeetingDto meetingDto);
 //    boolean createOrUpdateMeetingByTitle(String title);

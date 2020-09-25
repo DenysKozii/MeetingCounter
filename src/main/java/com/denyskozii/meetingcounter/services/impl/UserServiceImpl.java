@@ -23,7 +23,11 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Collectors;
-
+/**
+ * Date: 07.09.2020
+ *
+ * @author Denys Kozii
+ */
 @Service
 @Slf4j
 @Transactional

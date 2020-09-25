@@ -8,7 +8,11 @@ import lombok.*;
 
 import javax.persistence.Column;
 import java.time.LocalDate;
-
+/**
+ * Date: 07.09.2020
+ *
+ * @author Denys Kozii
+ */
 @Data
 @Builder
 @NoArgsConstructor

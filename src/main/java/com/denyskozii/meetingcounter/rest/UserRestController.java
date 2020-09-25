@@ -12,7 +12,11 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 
-
+/**
+ * Date: 07.09.2020
+ *
+ * @author Denys Kozii
+ */
 @RestController
 @Slf4j
 @CrossOrigin(origins = "*")
@@ -26,6 +30,10 @@ public class UserRestController {
         this.userService = userService;
     }
 
+
+    /**
+     * Calls if user wants to click "I'm here" and add his account to a meeting by id.
+     */
     @PostMapping("/add/{meetingId}")
     @PreAuthorize("hasAuthority('USER')")
     public ResponseStatus addToMeeting(@PathVariable long meetingId,
@@ -39,6 +47,10 @@ public class UserRestController {
         return new ResponseStatus(HttpStatus.OK.value(), added ? "user successfully added" : "user distance is incorrect");
     }
 
+
+    /**
+     * Calls to check if user already in concrete meeting.
+     */
     @PostMapping("/checkAdd/{meetingId}")
     @PreAuthorize("hasAuthority('USER')")
     public boolean checkAddToMeeting(@PathVariable long meetingId,
@@ -52,6 +64,10 @@ public class UserRestController {
         return userService.checkUserAdded(userId, longitude, latitude, meetingId);
     }
 
+
+    /**
+     * return user information.
+     */
     @GetMapping("/getUser")
     @PreAuthorize("hasAuthority('USER')")
     public UserDto getUser(HttpServletRequest request) {
@@ -60,6 +76,9 @@ public class UserRestController {
         return userService.getUserById(userIdByName);
     }
 
+    /**
+     * test connection.
+     */
     @GetMapping("/hello")
     public String hello() {
         return "hello";

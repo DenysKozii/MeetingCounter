@@ -8,7 +8,11 @@ import org.springframework.data.repository.query.Param;
 
 import javax.validation.constraints.Email;
 import java.util.List;
-
+/**
+ * Date: 07.09.2020
+ *
+ * @author Denys Kozii
+ */
 public interface UserRepository extends JpaRepository<User, Long> {
     @Query(value =
             "SELECT * FROM user u " +

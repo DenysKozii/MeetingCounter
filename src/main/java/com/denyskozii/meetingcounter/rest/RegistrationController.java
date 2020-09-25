@@ -12,7 +12,11 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-
+/**
+ * Date: 07.09.2020
+ *
+ * @author Denys Kozii
+ */
 @RestController
 @CrossOrigin(origins = "*")
 public class RegistrationController {
@@ -22,7 +26,9 @@ public class RegistrationController {
 
     @Autowired
     UserService userService;
-
+    /**
+     * register new user by form
+     */
     @PostMapping("/registration")
     public ResponseStatus registrationPost(@RequestBody UserDto userDto) {
         logger.info("Registration of " + userDto);

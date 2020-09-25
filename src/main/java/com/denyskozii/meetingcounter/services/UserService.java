@@ -3,7 +3,11 @@ package com.denyskozii.meetingcounter.services;
 import com.denyskozii.meetingcounter.dto.UserDto;
 
 import java.util.List;
-
+/**
+ * Date: 07.09.2020
+ *
+ * @author Denys Kozii
+ */
 public interface UserService  {
 
     UserDto getUserById(Long id);

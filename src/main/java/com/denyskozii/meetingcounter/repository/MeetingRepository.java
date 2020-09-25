@@ -10,7 +10,11 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-
+/**
+ * Date: 07.09.2020
+ *
+ * @author Denys Kozii
+ */
 public interface MeetingRepository extends JpaRepository<Meeting, Long> {
     Meeting findByTitle(String title);
 
