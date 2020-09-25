@@ -12,6 +12,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.time.LocalDate;
 import java.util.Collections;
 import java.util.List;
 /**
@@ -54,6 +55,18 @@ public class MeetingRestController {
         log.info("Generate meetings from " + id);
         MeetingDto meetingDto = meetingService.getMeetingByTitle(title);
         return meetingDto == null ? meetingService.getGenerateMeetingsList(id) : Collections.singletonList(meetingDto);
+    }
+
+    /**
+     * return 20 meetings from id for main list on the website.
+     */
+    @GetMapping("/upload/{time}/{limit}")
+    public List<MeetingDto> uploadNewMeetings(@PathVariable LocalDate time,
+                                              @PathVariable long limit,
+                                              @RequestParam String title) {
+        log.info("Upload meetings from " + time);
+        MeetingDto meetingDto = meetingService.getMeetingByTitle(title);
+        return meetingDto == null ? meetingService.uploadMeetingsList(time, limit) : Collections.singletonList(meetingDto);
     }
 
     /**

@@ -7,7 +7,9 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 /**
@@ -30,9 +32,14 @@ public interface MeetingRepository extends JpaRepository<Meeting, Long> {
     void increaseHereAmountByMeetingId(Long id);
 
 
-    @Query(value = "SELECT * FROM meetings " +
-            "            WHERE ID BETWEEN :id and :id+20", nativeQuery = true)
+    @Query(value = "SELECT /*TOP 20*/ * FROM meetings " +
+            "ORDER BY ID desc " +
+            "WHERE ID BETWEEN :id and :id+20", nativeQuery = true)
     List<Meeting> getGenerateMeetingsList(Long id);
 
     List<Meeting> getMeetingByUsers(User user);
+
+    @Query(value = "SELECT * FROM meetings " +
+            "            WHERE startDate > :time LIMIT :limit", nativeQuery = true)
+    List<Meeting> uploadMeetingsList(LocalDate time, Long limit);
 }

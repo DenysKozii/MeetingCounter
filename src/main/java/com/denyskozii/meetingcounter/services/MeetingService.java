@@ -4,6 +4,7 @@ import com.denyskozii.meetingcounter.dto.MeetingDto;
 import com.denyskozii.meetingcounter.dto.UserDto;
 import com.denyskozii.meetingcounter.exception.EntityNotFoundException;
 
+import java.time.LocalDate;
 import java.util.List;
 /**
  * Date: 07.09.2020
@@ -31,4 +32,5 @@ public interface MeetingService {
     List<MeetingDto> getMeetingsByUserId(Long id);
 
 
+    List<MeetingDto> uploadMeetingsList(LocalDate time, Long limit);
 }

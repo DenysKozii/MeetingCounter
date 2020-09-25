@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import javax.persistence.EntityNotFoundException;
 import javax.validation.Validator;
 import java.lang.reflect.Array;
+import java.time.LocalDate;
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -135,6 +136,14 @@ public class MeetingServiceImpl implements MeetingService {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("User with id " + id + " doesn't exists!"));
         return meetingRepository.getMeetingByUsers(user).stream()
+                .map(mapToMeetingDto)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<MeetingDto> uploadMeetingsList(LocalDate time, Long limit) {
+        return meetingRepository
+                .uploadMeetingsList(time,limit).stream()
                 .map(mapToMeetingDto)
                 .collect(Collectors.toList());
     }
