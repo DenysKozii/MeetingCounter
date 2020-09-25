@@ -13,6 +13,7 @@ import java.time.LocalDate;
  *
  * @author Denys Kozii
  */
+@Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
