@@ -5,6 +5,7 @@ import com.denyskozii.meetingcounter.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.validation.constraints.Email;
 import java.util.List;
@@ -31,4 +32,8 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     User findByEmailAndFirstNameAndLastName(String email, String firstName, String lastName);
 
+    @Transactional
+    @Query(value = "SELECT COUNT(*) FROM meeting_user " +
+            "WHERE user_id = :userId AND  meeting_id = :meetingId", nativeQuery = true)
+    boolean isUserInMeeting(Long userId, Long meetingId);
 }

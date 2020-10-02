@@ -18,11 +18,12 @@ import java.util.Optional;
  * @author Denys Kozii
  */
 public interface MeetingRepository extends JpaRepository<Meeting, Long> {
-    Meeting findByTitle(String title);
 
-    @Query(value = "SELECT M.hereAmount FROM meetings " +
-            " WHERE M.ID = :id", nativeQuery = true)
-    Long findHereAmountByMeetingId(Long id);
+    @Transactional(readOnly = true)
+    Meeting findAllByTitleContainingOrderByStartDate(String title);
+
+    @Transactional(readOnly = true)
+    Meeting findByTitle(String title);
 
     @Transactional
     @Modifying
@@ -32,14 +33,16 @@ public interface MeetingRepository extends JpaRepository<Meeting, Long> {
     void increaseHereAmountByMeetingId(Long id);
 
 
-    @Query(value = "SELECT /*TOP 20*/ * FROM meetings " +
-            "ORDER BY ID desc " +
-            "WHERE ID BETWEEN :id and :id+20", nativeQuery = true)
+    @Query(value = "SELECT * FROM meetings " +
+            "ORDER BY ID DESC " +
+            "LIMIT :id+20 OFFSET :id", nativeQuery = true)
     List<Meeting> getGenerateMeetingsList(Long id);
 
-    List<Meeting> getMeetingByUsers(User user);
+    List<Meeting> getMeetingsByUsers(User user);
 
-    @Query(value = "SELECT * FROM meetings " +
-            "            WHERE startDate > :time LIMIT :limit", nativeQuery = true)
-    List<Meeting> uploadMeetingsList(LocalDate time, Long limit);
+
+
+//    @Query(value = "SELECT * FROM meetings " +
+//            "            WHERE startDate > :time LIMIT :limit", nativeQuery = true)
+//    List<Meeting> uploadMeetingsList(LocalDate time, Long limit);
 }

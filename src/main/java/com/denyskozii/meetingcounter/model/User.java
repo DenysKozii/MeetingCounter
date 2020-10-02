@@ -75,6 +75,14 @@ public class User implements UserDetails {
             inverseJoinColumns = @JoinColumn(name = "meeting_id"))
     private List<Meeting> meetings = new ArrayList<>();
 
+    @ToString.Exclude
+    @OneToMany(
+            mappedBy = "meeting_author",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )
+    private List<Meeting> createdMeetings;
+
     @Override
     public boolean equals(Object o) {
 
@@ -101,7 +109,7 @@ public class User implements UserDetails {
 
     @Override
     public String getUsername() {
-        return firstName + " " + lastName;
+        return id.toString();
     }
 
     @Override

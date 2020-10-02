@@ -22,6 +22,9 @@ public interface UserService  {
 
     boolean checkUserAdded(Long userId, Double longitude, Double latitude, Long meetingId);
 
+    boolean isUserInMeeting(Long userId, Long meetingId);
+
+
 //    List<UserDto> getAllByMeetingId(Long meetingId);
 //
 //    void delete(Long userId);

@@ -167,6 +167,11 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         return user.getMeetings().contains(meeting);
     }
 
+    @Override
+    public boolean isUserInMeeting(Long userId, Long meetingId) {
+        return userRepository.isUserInMeeting(userId,meetingId);
+    }
+
     /**
      * Using Redis for increment amount of people on the meeting
      */

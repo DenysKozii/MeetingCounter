@@ -15,6 +15,8 @@ import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDate;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
+
 /**
  * Date: 07.09.2020
  *
@@ -40,11 +42,16 @@ public class MeetingRestController {
      */
     @GetMapping("/getByUser")
     @PreAuthorize("hasAuthority('USER')")
-    public List<MeetingDto> getMeetingsByUser(HttpServletRequest request) {
-        Long userIdByName = userService.getUserIdByName(request.getUserPrincipal().getName());
-        log.info("Get meetings by user id " + userIdByName);
-        return meetingService.getMeetingsByUserId(userIdByName);
+    public List<Long> getMeetingsByUser(HttpServletRequest request) {
+        Long userId = Long.valueOf(request.getUserPrincipal().getName());
+        log.info("Get meetings by user id " + userId);
+        return meetingService.getMeetingsByUserId(userId)
+                .stream()
+                .map(MeetingDto::getId)
+                .collect(Collectors.toList());
     }
+
+
 
     /**
      * return 20 meetings from id for main list on the website.
@@ -57,17 +64,18 @@ public class MeetingRestController {
         return meetingDto == null ? meetingService.getGenerateMeetingsList(id) : Collections.singletonList(meetingDto);
     }
 
+
     /**
      * return 20 meetings from id for main list on the website.
      */
-    @GetMapping("/upload/{time}/{limit}")
-    public List<MeetingDto> uploadNewMeetings(@PathVariable LocalDate time,
-                                              @PathVariable long limit,
-                                              @RequestParam String title) {
-        log.info("Upload meetings from " + time);
-        MeetingDto meetingDto = meetingService.getMeetingByTitle(title);
-        return meetingDto == null ? meetingService.uploadMeetingsList(time, limit) : Collections.singletonList(meetingDto);
-    }
+//    @GetMapping("/upload/{time}/{limit}")
+//    public List<MeetingDto> uploadNewMeetings(@PathVariable LocalDate time,
+//                                              @PathVariable long limit,
+//                                              @RequestParam String title) {
+//        log.info("Upload meetings from " + time);
+//        MeetingDto meetingDto = meetingService.getMeetingByTitle(title);
+//        return meetingDto == null ? meetingService.uploadMeetingsList(time, limit) : Collections.singletonList(meetingDto);
+//    }
 
     /**
      * create new meeting by Dto.

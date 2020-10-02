@@ -58,8 +58,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                     .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                     .authorizeRequests()
-                    .antMatchers("/registration","/login", "/form-login","/user/hello","/google-login","/hello","/meeting/generate/{id}").permitAll()
-              .anyRequest().authenticated()
+                    .antMatchers("/h2-console/**").permitAll()
+                    .antMatchers("/index", "/", "/form-login**", "/registration**", "/css/*", "/static/*").permitAll()
+                    .antMatchers("/students/*/**", "/marathons/*/**").hasAnyRole("ADMIN")
+                    .anyRequest().authenticated()
                 .and()
                     .logout()
                     .permitAll()
@@ -68,6 +70,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                     .accessDeniedHandler((request, response, accessDeniedException) -> response.sendRedirect("/access-denied"))
               .and()
                     .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
+        http.headers().frameOptions().disable();
     }
 
     @Override

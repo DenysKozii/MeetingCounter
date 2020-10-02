@@ -67,6 +67,10 @@ public class Meeting {
     private List<User> users;
 
 
+    @ToString.Exclude
+    @ManyToOne(fetch = FetchType.LAZY)
+    private User author;
+
 
     @Override
     public boolean equals(Object o) {

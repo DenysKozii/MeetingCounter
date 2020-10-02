@@ -1,5 +1,6 @@
 package com.denyskozii.meetingcounter.dto;
 
+import com.denyskozii.meetingcounter.model.User;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
@@ -38,6 +39,7 @@ public class MeetingDto {
 
     private Integer zoom;
 
+    private User author;
 
 
 }

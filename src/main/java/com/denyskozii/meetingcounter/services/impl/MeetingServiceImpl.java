@@ -72,7 +72,6 @@ public class MeetingServiceImpl implements MeetingService {
                     meetingDto.getAvailableDistance(),
                     meetingDto.getZoom());
             if (validator.validate(meeting).size() == 0) {
-//                return mapToMeetingDto.apply(meetingRepository.save(meeting));
                 meetingRepository.save(meeting);
                 return mapToMeetingDto.apply(meeting);
             }
@@ -119,7 +118,7 @@ public class MeetingServiceImpl implements MeetingService {
 
     @Override
     public MeetingDto getMeetingByTitle(String title) {
-        Meeting meeting = meetingRepository.findByTitle(title);
+        Meeting meeting = meetingRepository.findAllByTitleContainingOrderByStartDate(title);
         return meeting == null ? null : mapToMeetingDto.apply(meeting);
     }
 
@@ -135,15 +134,7 @@ public class MeetingServiceImpl implements MeetingService {
     public List<MeetingDto> getMeetingsByUserId(Long id) {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("User with id " + id + " doesn't exists!"));
-        return meetingRepository.getMeetingByUsers(user).stream()
-                .map(mapToMeetingDto)
-                .collect(Collectors.toList());
-    }
-
-    @Override
-    public List<MeetingDto> uploadMeetingsList(LocalDate time, Long limit) {
-        return meetingRepository
-                .uploadMeetingsList(time,limit).stream()
+        return meetingRepository.getMeetingsByUsers(user).stream()
                 .map(mapToMeetingDto)
                 .collect(Collectors.toList());
     }

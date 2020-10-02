@@ -31,6 +31,4 @@ public interface MeetingService {
 
     List<MeetingDto> getMeetingsByUserId(Long id);
 
-
-    List<MeetingDto> uploadMeetingsList(LocalDate time, Long limit);
 }

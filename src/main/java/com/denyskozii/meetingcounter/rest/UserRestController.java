@@ -43,8 +43,7 @@ public class UserRestController {
                                        @RequestBody HashMap<String, Double> coordinates,
                                        HttpServletRequest request) {
         log.info("Add user to meeting " + meetingId);
-        String userFullName = request.getUserPrincipal().getName();
-        Long userId = userService.getUserIdByName(userFullName);
+        Long userId = Long.valueOf(request.getUserPrincipal().getName());
         boolean added = userService.addUserToMeeting(userId, coordinates.get("longitude"), coordinates.get("latitude"), meetingId);
         return new ResponseStatus(HttpStatus.OK.value(), added ? "user successfully added" : "user distance is incorrect");
     }
@@ -61,12 +60,19 @@ public class UserRestController {
                                      @RequestBody HashMap<String, Double> coordinates,
                                      HttpServletRequest request) {
         log.info("Check if user added to meeting " + meetingId);
-        String userFullName = request.getUserPrincipal().getName();
-        Long userId = userService.getUserIdByName(userFullName);
+        Long userId = Long.valueOf(request.getUserPrincipal().getName());
 //        return new ResponseStatus(HttpStatus.OK.value(), added ? "user already added" : "user is not here");
         return userService.checkUserAdded(userId, coordinates.get("longitude"), coordinates.get("latitude"), meetingId);
     }
 
+    @GetMapping("/isInMeeting")
+    @PreAuthorize("hasAuthority('USER')")
+    public boolean isInMeeting(HttpServletRequest request,
+                                   @RequestParam Long meetingId) {
+        Long userId = Long.valueOf(request.getUserPrincipal().getName());
+        log.info("Check is user in meeting by id " + userId);
+        return userService.isUserInMeeting(userId,meetingId);
+    }
 
     /**
      * return user information.
@@ -74,9 +80,9 @@ public class UserRestController {
     @GetMapping("/getUser")
     @PreAuthorize("hasAuthority('USER')")
     public UserDto getUser(HttpServletRequest request) {
-        Long userIdByName = userService.getUserIdByName(request.getUserPrincipal().getName());
-        log.info("Get user by id " + userIdByName);
-        return userService.getUserById(userIdByName);
+        Long userId = Long.valueOf(request.getUserPrincipal().getName());
+        log.info("Get user by id " + userId);
+        return userService.getUserById(userId);
     }
 
     /**
