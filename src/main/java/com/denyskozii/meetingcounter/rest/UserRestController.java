@@ -96,6 +96,7 @@ public class UserRestController {
         log.info("Get friends by user id " + userId);
         return userService.getFriendsByUserId(userId);
     }
+
     /**
      * test connection.
      */
