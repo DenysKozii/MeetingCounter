@@ -32,6 +32,10 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     User findByEmailAndFirstNameAndLastName(String email, String firstName, String lastName);
 
+    @Query(value = "SELECT * FROM user_friend " +
+            "WHERE user_id = :userId", nativeQuery = true)
+    List<User> getFriendsByUserId(Long id);
+
     @Transactional
     @Query(value = "SELECT COUNT(*) FROM meeting_user " +
             "WHERE user_id = :userId AND  meeting_id = :meetingId", nativeQuery = true)

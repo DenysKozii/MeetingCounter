@@ -73,7 +73,7 @@ public class User implements UserDetails {
     @JoinTable(name = "meeting_user",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "meeting_id"))
-    private List<Meeting> meetings = new ArrayList<>();
+    private List<Meeting> meetings ;
 
     @ToString.Exclude
     @OneToMany(
@@ -82,6 +82,15 @@ public class User implements UserDetails {
             orphanRemoval = true
     )
     private List<Meeting> createdMeetings;
+
+
+    @ToString.Exclude
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "user_friend",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "friend_id"))
+    private List<User> friends;
+
 
     @Override
     public boolean equals(Object o) {

@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
+import java.util.List;
 
 /**
  * Date: 07.09.2020
@@ -85,6 +86,16 @@ public class UserRestController {
         return userService.getUserById(userId);
     }
 
+    /**
+     * return user information.
+     */
+    @GetMapping("/friends")
+    @PreAuthorize("hasAuthority('USER')")
+    public List<UserDto> getFriends(HttpServletRequest request) {
+        Long userId = Long.valueOf(request.getUserPrincipal().getName());
+        log.info("Get friends by user id " + userId);
+        return userService.getFriendsByUserId(userId);
+    }
     /**
      * test connection.
      */

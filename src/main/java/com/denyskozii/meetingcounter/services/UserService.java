@@ -1,22 +1,22 @@
 package com.denyskozii.meetingcounter.services;
 
 import com.denyskozii.meetingcounter.dto.UserDto;
+import com.denyskozii.meetingcounter.model.User;
 
 import java.util.List;
+
 /**
  * Date: 07.09.2020
  *
  * @author Denys Kozii
  */
-public interface UserService  {
+public interface UserService {
 
     UserDto getUserById(Long id);
 
-//    UserDto getUserByEmail(String email);
-
     Long getUserIdByName(String userFullName);
 
-//    List<UserDto> getAllByRole(String role);
+    List<UserDto> getFriendsByUserId(Long id);
 
     boolean addUserToMeeting(Long userId, Double longitude, Double latitude, Long meetingId);
 
@@ -24,19 +24,12 @@ public interface UserService  {
 
     boolean isUserInMeeting(Long userId, Long meetingId);
 
-
-//    List<UserDto> getAllByMeetingId(Long meetingId);
-//
-//    void delete(Long userId);
-//
-//    boolean removeFromMeeting(Long userId, Long meetingId);
-
     boolean login(String email, String password);
 
-    boolean login(String email, String firstName,String lastName);
+    boolean login(String email, String firstName, String lastName);
 
     boolean register(UserDto userDto);
 
-    boolean register(String email, String firstName,String lastName);
+    boolean register(String email, String firstName, String lastName);
 
 }
