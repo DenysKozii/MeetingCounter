@@ -15,14 +15,14 @@ import java.util.List;
  * @author Denys Kozii
  */
 public interface UserRepository extends JpaRepository<User, Long> {
-    @Query(value =
-            "SELECT * FROM user u " +
-                    "WHERE u.id IN( " +
-                    "   SELECT me.user_id " +
-                    "   FROM meeting_user me" +
-                    "   WHERE me.meeting_id =:meetingId" +
-                    ")", nativeQuery = true)
-    List<User> getAllByMeetingId(@Param("meetingId") Long meetingId);
+//    @Query(value =
+//            "SELECT * FROM user u " +
+//                    "WHERE u.id IN( " +
+//                    "   SELECT me.user_id " +
+//                    "   FROM meeting_user me" +
+//                    "   WHERE me.meeting_id =:meetingId" +
+//                    ")", nativeQuery = true)
+//    List<User> getAllByMeetingId(@Param("meetingId") Long meetingId);
 
     User findByEmail(@Email(message = "Wrong email format") String email);
 
@@ -31,10 +31,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
     User findByFirstNameAndLastName(String firstName, String lastName);
 
     User findByEmailAndFirstNameAndLastName(String email, String firstName, String lastName);
-
-    @Query(value = "SELECT * FROM user_friend " +
-            "WHERE user_id = :userId", nativeQuery = true)
-    List<User> getFriendsByUserId(Long id);
 
     @Transactional
     @Query(value = "SELECT COUNT(*) FROM meeting_user " +

@@ -3,6 +3,7 @@ package com.denyskozii.meetingcounter.rest;
 
 import com.denyskozii.meetingcounter.dto.MeetingDto;
 import com.denyskozii.meetingcounter.dto.ResponseStatus;
+import com.denyskozii.meetingcounter.dto.UserDto;
 import com.denyskozii.meetingcounter.services.MeetingService;
 import com.denyskozii.meetingcounter.services.UserService;
 import lombok.extern.slf4j.Slf4j;
@@ -37,26 +38,50 @@ public class MeetingRestController {
         this.userService = userService;
     }
 
+
+
     /**
      * return all meeting from concrete user.
      */
-    @GetMapping("/getByUser")
+    @GetMapping("/get")
     @PreAuthorize("hasAuthority('USER')")
-    public List<Long> getMeetingsByUser(HttpServletRequest request) {
+    public List<MeetingDto> getMeetingsByUser(HttpServletRequest request) {
         Long userId = Long.valueOf(request.getUserPrincipal().getName());
         log.info("Get meetings by user id " + userId);
-        return meetingService.getMeetingsByUserId(userId)
-                .stream()
-                .map(MeetingDto::getId)
+        return meetingService.getMeetingsByUserId(userId);
+    }
+
+    /**
+     * return all meeting from concrete user.
+     */
+    @GetMapping("/get/future")
+    @PreAuthorize("hasAuthority('USER')")
+    public List<MeetingDto> getFutureMeetingsByUser(HttpServletRequest request) {
+        Long userId = Long.valueOf(request.getUserPrincipal().getName());
+        log.info("Get meetings by user id " + userId);
+        return meetingService.getMeetingsByUserId(userId).stream()
+                .filter(o->o.getFinishDate()
+                        .isAfter(LocalDate.now()))
                 .collect(Collectors.toList());
     }
 
+    /**
+     * return all meeting from concrete user.
+     */
+    @GetMapping("/created")
+    @PreAuthorize("hasAuthority('USER')")
+    public List<MeetingDto> getCreatedMeetingsByUser(HttpServletRequest request) {
+        Long userId = Long.valueOf(request.getUserPrincipal().getName());
+        log.info("Get meetings by user id " + userId);
+        return meetingService.getMeetingsByAuthorId(userId);
+    }
 
 
     /**
      * return 20 meetings from id for main list on the website.
      */
     @GetMapping("/generate/{id}")
+    @PreAuthorize("hasAuthority('USER')")
     public List<MeetingDto> generateMeetings(@PathVariable long id,
                                              @RequestParam String title) {
         log.info("Generate meetings from " + id);
@@ -64,25 +89,15 @@ public class MeetingRestController {
         return meetingDto == null ? meetingService.getGenerateMeetingsList(id) : Collections.singletonList(meetingDto);
     }
 
-
-    /**
-     * return 20 meetings from id for main list on the website.
-     */
-//    @GetMapping("/upload/{time}/{limit}")
-//    public List<MeetingDto> uploadNewMeetings(@PathVariable LocalDate time,
-//                                              @PathVariable long limit,
-//                                              @RequestParam String title) {
-//        log.info("Upload meetings from " + time);
-//        MeetingDto meetingDto = meetingService.getMeetingByTitle(title);
-//        return meetingDto == null ? meetingService.uploadMeetingsList(time, limit) : Collections.singletonList(meetingDto);
-//    }
-
     /**
      * create new meeting by Dto.
      */
     @PostMapping("/create")
     @PreAuthorize("hasAuthority('USER')")
-    public ResponseStatus createMeeting(@RequestBody MeetingDto meetingDto) {
+    public ResponseStatus createMeeting(@RequestBody MeetingDto meetingDto, HttpServletRequest request) {
+        Long userId = Long.valueOf(request.getUserPrincipal().getName());
+        UserDto userDto = userService.getUserById(userId);
+        meetingDto.setAuthor(userService.mapToUser.apply(userDto));
         log.info("Create meeting " + meetingDto);
         meetingService.createOrUpdateMeeting(meetingDto);
         return new ResponseStatus(HttpStatus.OK.value(),"");

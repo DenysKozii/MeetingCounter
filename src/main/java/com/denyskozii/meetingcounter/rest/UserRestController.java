@@ -78,7 +78,7 @@ public class UserRestController {
     /**
      * return user information.
      */
-    @GetMapping("/getUser")
+    @GetMapping("/get")
     @PreAuthorize("hasAuthority('USER')")
     public UserDto getUser(HttpServletRequest request) {
         Long userId = Long.valueOf(request.getUserPrincipal().getName());
@@ -95,6 +95,17 @@ public class UserRestController {
         Long userId = Long.valueOf(request.getUserPrincipal().getName());
         log.info("Get friends by user id " + userId);
         return userService.getFriendsByUserId(userId);
+    }
+
+    /**
+     * return user information.
+     */
+    @GetMapping("/friends/{meetingId}")
+    @PreAuthorize("hasAuthority('USER')")
+    public List<UserDto> getFriends(@PathVariable("meetingId") Long meetingId, HttpServletRequest request) {
+        Long userId = Long.valueOf(request.getUserPrincipal().getName());
+        log.info("Get friends by user id " + userId);
+        return userService.getFriendsByUserIdAndMeetingId(userId, meetingId);
     }
 
     /**

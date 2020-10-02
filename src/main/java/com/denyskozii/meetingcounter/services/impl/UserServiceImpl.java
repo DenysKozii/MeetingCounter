@@ -61,18 +61,16 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     @Override
     public User loadUserByUsername(String email) throws UsernameNotFoundException {
         User user = userRepository.findByEmail(email);
-        if (user == null) {
+        if (user == null)
             throw new UsernameNotFoundException("User not found");
-        }
         return user;
     }
 
-
     @Override
     public UserDto getUserById(Long id) {
-        return mapToUserDto.apply(userRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("User with id " + id + " doesn't exists!")));
+        return mapToUserDto.apply(userRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("User with id " + id + " doesn't exists!")));
     }
-
 
     @Override
     public Long getUserIdByName(String userFullName) {
@@ -85,11 +83,27 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     @Override
     public List<UserDto> getFriendsByUserId(Long id) {
-        return userRepository.getFriendsByUserId(id).stream()
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("User with id " + id + " doesn't exists!"));
+
+        return user.getFriends().stream()
                 .map(mapToUserDto)
                 .collect(Collectors.toList());
     }
 
+    @Override
+    public List<UserDto> getFriendsByUserIdAndMeetingId(Long userId, Long meetingId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new EntityNotFoundException("User with id " + userId + " doesn't exists!"));
+        Meeting meeting = meetingRepository.findById(meetingId)
+                .orElseThrow(() -> new EntityNotFoundException("User with id " + meetingId + " doesn't exists!"));;
+        return user.getFriends().stream()
+                .filter(o->meeting.getUsers()
+                        .contains(o))
+                .map(mapToUserDto)
+                .collect(Collectors.toList());
+
+    }
     /**
      * Calculate distance between two points in latitude and longitude taking
      * into account height difference. If you are not interested in height
@@ -174,8 +188,6 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         User user = userRepository.findByEmail(email);
         if (user == null)
             throw new EntityNotFoundException("User with email " + email + " not found");
-//        System.out.println(user.getPassword());
-//        System.out.println(password);
         return /*user.getPassword().equals(password);*/ true;
     }
 
@@ -217,22 +229,6 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
 
-    Function<UserDto, User> mapToUser = (userDto -> {
-        User user = new User();
-        user.setPassword(userDto.getPassword());
-        user.setConfirmPassword(userDto.getConfirmPassword());
-        user.setFirstName(userDto.getFirstName());
-        user.setLastName(userDto.getLastName());
-        user.setEmail(userDto.getEmail());
-        user.setRole(Role.USER);
-        return user;
-    });
 
-    Function<User, UserDto> mapToUserDto = (user -> UserDto.builder()
-            .id(user.getId())
-            .firstName(user.getFirstName())
-            .lastName(user.getLastName())
-            .email(user.getEmail())
-            .password(user.getPassword())
-            .build());
+
 }

@@ -37,12 +37,4 @@ public interface MeetingRepository extends JpaRepository<Meeting, Long> {
             "ORDER BY ID DESC " +
             "LIMIT :id+20 OFFSET :id", nativeQuery = true)
     List<Meeting> getGenerateMeetingsList(Long id);
-
-    List<Meeting> getMeetingsByUsers(User user);
-
-
-
-//    @Query(value = "SELECT * FROM meetings " +
-//            "            WHERE startDate > :time LIMIT :limit", nativeQuery = true)
-//    List<Meeting> uploadMeetingsList(LocalDate time, Long limit);
 }

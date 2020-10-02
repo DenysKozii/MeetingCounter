@@ -44,7 +44,7 @@ public class UserServiceTest {
     @BeforeEach
     public void setUp() {
         userService = new UserServiceImpl(userRepository,meetingRepository/*,redisTemplate*/);
-        User user = new User(1L,"Denys", "Kozii","denys.kozii@gmail.com","123123","123123", Role.USER, Date.valueOf(LocalDate.now()),new ArrayList<>());
+        User user = new User(1L,"Denys", "Kozii","denys.kozii@gmail.com","123123","123123", Role.USER, Date.valueOf(LocalDate.now()),new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
         doReturn(Optional.of(user)).when(userRepository).findById(1L);
         doReturn(user).when(userRepository).findByFirstNameAndLastName("Denys", "Kozii");
     }

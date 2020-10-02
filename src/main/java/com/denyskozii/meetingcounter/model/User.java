@@ -77,7 +77,7 @@ public class User implements UserDetails {
 
     @ToString.Exclude
     @OneToMany(
-            mappedBy = "meeting_author",
+            mappedBy = "author",
             cascade = CascadeType.ALL,
             orphanRemoval = true
     )
@@ -88,7 +88,7 @@ public class User implements UserDetails {
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "user_friend",
             joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "friend_id"))
+            inverseJoinColumns = @JoinColumn(name = "friend_id", referencedColumnName="id"))
     private List<User> friends;
 
 
