@@ -46,10 +46,9 @@ public class MeetingRestController {
      */
     @GetMapping("/get")
     @PreAuthorize("hasAuthority('USER')")
-    public List<MeetingDto> getMeetingsByUser(HttpServletRequest request) {
-        Long userId = Long.valueOf(request.getUserPrincipal().getName());
-        log.info("Get meetings by user id " + userId);
-        return meetingService.getMeetingsByUserId(userId);
+    public List<MeetingDto> getMeetingsByUser(@AuthenticationPrincipal UserDto user) {
+        log.info("Get meetings by user " + user);
+        return meetingService.getMeetingsByUserId(user.getId());
     }
 
     /**
@@ -57,10 +56,9 @@ public class MeetingRestController {
      */
     @GetMapping("/get/future")
     @PreAuthorize("hasAuthority('USER')")
-    public List<MeetingDto> getFutureMeetingsByUser(HttpServletRequest request) {
-        Long userId = Long.valueOf(request.getUserPrincipal().getName());
-        log.info("Get meetings by user id " + userId);
-        return meetingService.getMeetingsByUserId(userId).stream()
+    public List<MeetingDto> getFutureMeetingsByUser(@AuthenticationPrincipal UserDto user) {
+        log.info("Get meetings by user " + user);
+        return meetingService.getMeetingsByUserId(user.getId()).stream()
                 .filter(o->o.getFinishDate()
                         .isAfter(LocalDate.now()))
                 .collect(Collectors.toList());
@@ -94,13 +92,11 @@ public class MeetingRestController {
      */
     @PostMapping("/create")
     @PreAuthorize("hasAuthority('USER')")
-    public ResponseStatus createMeeting(@RequestBody MeetingDto meetingDto, HttpServletRequest request) {
-        Long userId = Long.valueOf(request.getUserPrincipal().getName());
-        UserDto userDto = userService.getUserById(userId);
-        meetingDto.setAuthor(userService.mapToUser.apply(userDto));
+    public ResponseStatus createMeeting(@RequestBody MeetingDto meetingDto, @AuthenticationPrincipal UserDto user) {
+        meetingDto.setAuthor(userService.mapToUser.apply(user));
         log.info("Create meeting " + meetingDto);
         meetingService.createOrUpdateMeeting(meetingDto);
-        return new ResponseStatus(HttpStatus.OK.value(),"");
+        return new ResponseStatus(HttpStatus.OK.value());
     }
 
 }
