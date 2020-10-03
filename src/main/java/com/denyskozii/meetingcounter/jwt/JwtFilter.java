@@ -1,6 +1,7 @@
 package com.denyskozii.meetingcounter.jwt;
 
 
+import com.denyskozii.meetingcounter.dto.UserDto;
 import com.denyskozii.meetingcounter.model.User;
 import com.denyskozii.meetingcounter.services.impl.UserServiceImpl;
 import org.slf4j.Logger;
@@ -45,7 +46,7 @@ public class JwtFilter extends GenericFilterBean {
         String token = getTokenFromRequest((HttpServletRequest) servletRequest);
         if ((token != null) && jwtProvider.validateToken(token)) {
             String login = jwtProvider.getLoginFromToken(token);
-            User user = userService.loadUserByUsername(login);
+            UserDto user = userService.loadUserByUsername(login);
             user.setExpirationDate(jwtProvider.getExpirationDate(token));
             UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(user,
                     null, user.getAuthorities());

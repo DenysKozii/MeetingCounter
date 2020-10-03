@@ -26,7 +26,7 @@ public interface UserService {
 
     boolean checkUserAdded(Long userId, Double longitude, Double latitude, Long meetingId);
 
-    boolean isUserInMeeting(Long userId, Long meetingId);
+    boolean isUserSubscribedToMeeting(Long userId, Long meetingId);
 
     boolean login(String email, String password);
 
@@ -43,6 +43,7 @@ public interface UserService {
         user.setFirstName(userDto.getFirstName());
         user.setLastName(userDto.getLastName());
         user.setEmail(userDto.getEmail());
+        user.setExpirationDate(userDto.getExpirationDate());
         user.setRole(Role.USER);
         return user;
     });
@@ -54,6 +55,8 @@ public interface UserService {
             .lastName(user.getLastName())
             .email(user.getEmail())
             .password(user.getPassword())
+            .expirationDate(user.getExpirationDate())
+            .role(user.getRole())
             .build());
 
 }

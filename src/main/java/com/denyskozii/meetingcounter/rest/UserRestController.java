@@ -2,12 +2,14 @@ package com.denyskozii.meetingcounter.rest;
 
 
 import com.denyskozii.meetingcounter.dto.UserDto;
+import com.denyskozii.meetingcounter.model.User;
 import lombok.extern.slf4j.Slf4j;
 import com.denyskozii.meetingcounter.dto.ResponseStatus;
 import com.denyskozii.meetingcounter.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -39,8 +41,6 @@ public class UserRestController {
     @PostMapping("/add/{meetingId}")
     @PreAuthorize("hasAuthority('USER')")
     public ResponseStatus addToMeeting(@PathVariable long meetingId,
-//                                       @RequestParam Double longitude,
-//                                       @RequestParam Double latitude,
                                        @RequestBody HashMap<String, Double> coordinates,
                                        HttpServletRequest request) {
         log.info("Add user to meeting " + meetingId);
@@ -53,11 +53,9 @@ public class UserRestController {
     /**
      * Calls to check if user already in concrete meeting.
      */
-    @PostMapping("/checkAdd/{meetingId}")
+    @PostMapping("/isInRadius/{meetingId}")
     @PreAuthorize("hasAuthority('USER')")
-    public boolean checkAddToMeeting(@PathVariable long meetingId,
-//                                       @RequestParam Double longitude,
-//                                       @RequestParam Double latitude,
+    public boolean isUserInMeetingRadius(@RequestParam Long meetingId,
                                      @RequestBody HashMap<String, Double> coordinates,
                                      HttpServletRequest request) {
         log.info("Check if user added to meeting " + meetingId);
@@ -66,24 +64,31 @@ public class UserRestController {
         return userService.checkUserAdded(userId, coordinates.get("longitude"), coordinates.get("latitude"), meetingId);
     }
 
-    @GetMapping("/isInMeeting")
+    @GetMapping("/isSubscribed")
     @PreAuthorize("hasAuthority('USER')")
-    public boolean isInMeeting(HttpServletRequest request,
+    public boolean isUserSubscribedToMeeting(HttpServletRequest request,
                                    @RequestParam Long meetingId) {
         Long userId = Long.valueOf(request.getUserPrincipal().getName());
         log.info("Check is user in meeting by id " + userId);
-        return userService.isUserInMeeting(userId,meetingId);
+        return userService.isUserSubscribedToMeeting(userId,meetingId);
     }
 
     /**
      * return user information.
      */
-    @GetMapping("/get")
+//    @GetMapping("/get")
+//    @PreAuthorize("hasAuthority('USER')")
+//    public UserDto getUser(HttpServletRequest request) {
+//        Long userId = Long.valueOf(request.getUserPrincipal().getName());
+//        log.info("Get user by id " + userId);
+//        return userService.getUserById(userId);
+//    }
+
+    @GetMapping("/current")
     @PreAuthorize("hasAuthority('USER')")
-    public UserDto getUser(HttpServletRequest request) {
-        Long userId = Long.valueOf(request.getUserPrincipal().getName());
-        log.info("Get user by id " + userId);
-        return userService.getUserById(userId);
+    public UserDto getUser(@AuthenticationPrincipal UserDto user) {
+        log.info("Get user " + user);
+        return user;
     }
 
     /**
@@ -100,9 +105,9 @@ public class UserRestController {
     /**
      * return user information.
      */
-    @GetMapping("/friends/{meetingId}")
+    @GetMapping("/friends/subscribedTo")
     @PreAuthorize("hasAuthority('USER')")
-    public List<UserDto> getFriends(@PathVariable("meetingId") Long meetingId, HttpServletRequest request) {
+    public List<UserDto> getFriends(@RequestParam Long meetingId, HttpServletRequest request) {
         Long userId = Long.valueOf(request.getUserPrincipal().getName());
         log.info("Get friends by user id " + userId);
         return userService.getFriendsByUserIdAndMeetingId(userId, meetingId);
@@ -111,8 +116,8 @@ public class UserRestController {
     /**
      * test connection.
      */
-    @GetMapping("/hello")
-    public String hello() {
-        return "hello";
+    @GetMapping("/version")
+    public String version() {
+        return "1.0";
     }
 }

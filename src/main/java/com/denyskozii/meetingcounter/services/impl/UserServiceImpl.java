@@ -59,11 +59,11 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
 
     @Override
-    public User loadUserByUsername(String email) throws UsernameNotFoundException {
+    public UserDto loadUserByUsername(String email) throws UsernameNotFoundException {
         User user = userRepository.findByEmail(email);
         if (user == null)
             throw new UsernameNotFoundException("User not found");
-        return user;
+        return mapToUserDto.apply(user);
     }
 
     @Override
@@ -141,7 +141,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         Meeting meeting = meetingRepository.findById(meetingId)
                 .orElseThrow(()->new EntityNotFoundException("Meeting with id " + meetingId + " not found"));
 
-        if (!user.getMeetings().contains(meeting)) {
+        if (!isUserSubscribedToMeeting(userId,meetingId)) {
             boolean availableDistance = distance(
                     latitude,
                     longitude,
@@ -169,8 +169,8 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
-    public boolean isUserInMeeting(Long userId, Long meetingId) {
-        return userRepository.isUserInMeeting(userId,meetingId);
+    public boolean isUserSubscribedToMeeting(Long userId, Long meetingId) {
+        return userRepository.isUserSubscribedToMeeting(userId,meetingId);
     }
 
     /**

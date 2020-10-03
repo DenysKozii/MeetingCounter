@@ -56,12 +56,13 @@ public class MeetingServiceImpl implements MeetingService {
     @Override
     public MeetingDto getMeetingById(Long id) {
         return mapToMeetingDto.apply(meetingRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Marathon with id " + id + " doesn't exists!")));
+                .orElseThrow(() -> new EntityNotFoundException("Meeting with id " + id + " doesn't exists!")));
     }
 
     @Override
     public MeetingDto createOrUpdateMeeting(MeetingDto meetingDto) throws EntityNotFoundException{
-        Meeting meeting = meetingRepository.findByTitle(meetingDto.getTitle());
+        Meeting meeting = meetingRepository.findById(meetingDto.getId())
+                .orElseThrow(() -> new EntityNotFoundException("Meeting with id " + meetingDto.getId() + " doesn't exists!"));
 
         if (meeting == null) {
             meeting = new Meeting(meetingDto.getTitle(),
@@ -107,7 +108,7 @@ public class MeetingServiceImpl implements MeetingService {
     public List<MeetingDto> getMeetingsByAuthorId(Long id) {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("User with id " + id + " doesn't exists!"));
-        List<MeetingDto> meetingDtos = user.getCreatedMeetings().stream()
+        List<MeetingDto> meetingDtos = user.getMeetings().stream()
                 .map(mapToMeetingDto)
                 .collect(Collectors.toList());
         Collections.reverse(meetingDtos);

@@ -33,6 +33,6 @@ public class RegistrationController {
     public ResponseStatus registrationPost(@RequestBody UserDto userDto) {
         logger.info("Registration of " + userDto);
         boolean isRegistered = userService.register(userDto);
-        return isRegistered ? new ResponseStatus(HttpStatus.OK.value(),"successfully registered") : new ResponseStatus(409,"some problems");
+        return isRegistered ? new ResponseStatus(HttpStatus.OK.value(),"successfully registered") : new ResponseStatus(HttpStatus.CONFLICT.value(),"some problems");
     }
 }

@@ -10,6 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -68,21 +69,20 @@ public class MeetingRestController {
     /**
      * return all meeting from concrete user.
      */
-    @GetMapping("/created")
+    @GetMapping("/myMeetings")
     @PreAuthorize("hasAuthority('USER')")
-    public List<MeetingDto> getCreatedMeetingsByUser(HttpServletRequest request) {
-        Long userId = Long.valueOf(request.getUserPrincipal().getName());
-        log.info("Get meetings by user id " + userId);
-        return meetingService.getMeetingsByAuthorId(userId);
+    public List<MeetingDto> getMyMeetings(@AuthenticationPrincipal UserDto user) {
+        log.info("Get meetings by user " + user);
+        return meetingService.getMeetingsByAuthorId(user.getId());
     }
 
 
     /**
      * return 20 meetings from id for main list on the website.
      */
-    @GetMapping("/generate/{id}")
+    @GetMapping("/generate")
     @PreAuthorize("hasAuthority('USER')")
-    public List<MeetingDto> generateMeetings(@PathVariable long id,
+    public List<MeetingDto> generateMeetings(@RequestParam long id,
                                              @RequestParam String title) {
         log.info("Generate meetings from " + id);
         MeetingDto meetingDto = meetingService.getMeetingByTitle(title);

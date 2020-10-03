@@ -1,13 +1,18 @@
 package com.denyskozii.meetingcounter.rest;
 
 
+import com.denyskozii.meetingcounter.dto.UserDto;
 import com.denyskozii.meetingcounter.dto.UserLoginDto;
 import com.denyskozii.meetingcounter.services.UserService;
 import com.denyskozii.meetingcounter.dto.ResponseStatus;
 import com.denyskozii.meetingcounter.dto.TokenDto;
 import com.denyskozii.meetingcounter.jwt.JwtProvider;
+import com.mysql.cj.x.protobuf.Mysqlx;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpGet;
@@ -37,27 +42,30 @@ public class LoginController {
     private String lastName;
     private String email;
 
-    @GetMapping("/form-login")
-    public ResponseStatus login() {
-        return new ResponseStatus(200, "login complete");
-    }
+//    @GetMapping("/form-login")
+//    public ResponseStatus login() {
+//        return new ResponseStatus(200, "login complete");
+//    }
 
     /**
      * login user by Dto
      */
     @PostMapping("/login")
-    public ResponseStatus loginPost(@RequestBody UserLoginDto userLoginDto) {
+    public ResponseEntity<String> loginPost(@RequestBody UserDto userLoginDto) {
         log.info("login " + userLoginDto);
-        if (userService.login(userLoginDto.getEmail(), userLoginDto.getPassword()))
-            return new ResponseStatus(200, new TokenDto(jwtProvider.generateToken(userLoginDto.getEmail())).toString());
-        return new ResponseStatus(409, "some problems in login");
+        if (userService.login(userLoginDto.getEmail(), userLoginDto.getPassword())){
+            HttpHeaders headers = new HttpHeaders();
+            headers.setBasicAuth(jwtProvider.generateToken(userLoginDto.getEmail()));
+            return new ResponseEntity<>(headers, HttpStatus.OK);
+        }
+        return new ResponseEntity<>(HttpStatus.CONFLICT);
     }
 
     /**
      * login user from Google auth with token.
      */
     @PostMapping("/google-login")
-    public ResponseStatus googleLoginPost(@RequestParam String token) throws IOException {
+    public ResponseEntity<String> googleLoginPost(@RequestParam String token) throws IOException {
         try (CloseableHttpClient client = HttpClientBuilder.create().build()) {
             var request = new HttpGet("https://www.googleapis.com/oauth2/v3/tokeninfo?id_token=" + token);
             HttpResponse response = client.execute(request);
@@ -75,7 +83,9 @@ public class LoginController {
             log.info("Google login for " + email);
             if (!userService.login(email, firstName, lastName))
                 userService.register(email, firstName, lastName);
-            return new ResponseStatus(200,new TokenDto(jwtProvider.generateToken(email)).toString());
+            HttpHeaders headers = new HttpHeaders();
+            headers.setBasicAuth(jwtProvider.generateToken(email));
+            return new ResponseEntity<>(headers, HttpStatus.OK);
         }
     }
 

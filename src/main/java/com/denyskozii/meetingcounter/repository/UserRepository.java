@@ -35,5 +35,8 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Transactional
     @Query(value = "SELECT COUNT(*) FROM meeting_user " +
             "WHERE user_id = :userId AND  meeting_id = :meetingId", nativeQuery = true)
-    boolean isUserInMeeting(Long userId, Long meetingId);
+    boolean isUserSubscribedToMeeting(Long userId, Long meetingId);
+
+
+//    void addMeetingToUserById(Long userId, Long MeetingId);
 }

@@ -43,7 +43,6 @@ public class MeetingServiceTest {
         meetingService = new MeetingServiceImpl(meetingRepository, userRepository);
         Meeting meeting = new Meeting("FirstMeeting","none",0L,0D,0D,10D,12);
         meeting.setId(1L);
-        doReturn(meeting).when(meetingRepository).findByTitle("FirstMeeting");
         doReturn(Optional.of(meeting)).when(meetingRepository).findById(1L);
         doReturn(List.of(meeting)).when(meetingRepository).findAll();
         doReturn(List.of(meeting)).when(meetingRepository).getGenerateMeetingsList(0L);
