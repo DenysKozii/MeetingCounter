@@ -88,31 +88,88 @@ public class MeetingServiceImpl implements MeetingService {
     }
 
     @Override
-    public List<MeetingDto> getGenerateMeetingsList(Long id) {
-        return meetingRepository
-                .getGenerateMeetingsList(id).stream()
-                .map(mapToMeetingDto)
-                .collect(Collectors.toList());
-    }
-
-    @Override
-    public List<MeetingDto> getMeetingsByUserId(Long id) {
-        User user = userRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("User with id " + id + " doesn't exists!"));
-        return user.getMeetings().stream()
-                .map(mapToMeetingDto)
-                .collect(Collectors.toList());
-    }
-
-    @Override
-    public List<MeetingDto> getMeetingsByAuthorId(Long id) {
-        User user = userRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("User with id " + id + " doesn't exists!"));
-        List<MeetingDto> meetingDtos = user.getMeetings().stream()
+    public List<MeetingDto> getAllMeetings(Long startId) {
+//        return meetingRepository
+//                .getGenerateMeetingsList(id).stream()
+//                .map(mapToMeetingDto)
+//                .collect(Collectors.toList());
+        List<MeetingDto> meetingDtos = meetingRepository.findAll().stream()
+                .limit(startId+20)
                 .map(mapToMeetingDto)
                 .collect(Collectors.toList());
         Collections.reverse(meetingDtos);
-        return meetingDtos;
+        return meetingDtos.subList(0,20);
+    }
+
+//    @Override
+//    public List<MeetingDto> getMeetingsByUserId(Long id) {
+//        User user = userRepository.findById(id)
+//                .orElseThrow(() -> new EntityNotFoundException("User with id " + id + " doesn't exists!"));
+//        return user.getMeetings().stream()
+//                .map(mapToMeetingDto)
+//                .collect(Collectors.toList());
+//    }
+
+    @Override
+    public List<MeetingDto> getMeetingsByAuthorId(Long userId, Long startId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new EntityNotFoundException("User with id " + userId + " doesn't exists!"));
+        List<MeetingDto> meetingDtos = user.getMyMeetings().stream()
+                .limit(startId+20)
+                .map(mapToMeetingDto)
+                .collect(Collectors.toList());
+        Collections.reverse(meetingDtos);
+        return meetingDtos.subList(0,20);
+    }
+
+    @Override
+    public List<MeetingDto> getCurrentMeetingsByUserId(Long userId, Long startId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new EntityNotFoundException("User with id " + userId + " doesn't exists!"));
+        List<MeetingDto> meetingDtos = user.getMeetings().stream()
+                .limit(startId+20)
+                .filter(o->o.getStartDate().isBefore(LocalDate.now()))
+                .filter(o->o.getFinishDate().isAfter(LocalDate.now()))
+                .map(mapToMeetingDto)
+                .collect(Collectors.toList());
+        Collections.reverse(meetingDtos);
+        return meetingDtos.subList(0,20);
+    }
+
+    @Override
+    public List<MeetingDto> getFutureMeetingsByUserId(Long userId, Long startId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new EntityNotFoundException("User with id " + userId + " doesn't exists!"));
+        List<MeetingDto> meetingDtos = user.getMeetings().stream()
+                .limit(startId+20)
+                .filter(o->o.getStartDate().isAfter(LocalDate.now()))
+                .map(mapToMeetingDto)
+                .collect(Collectors.toList());
+        Collections.reverse(meetingDtos);
+        return meetingDtos.subList(0,20);
+    }
+
+    @Override
+    public List<MeetingDto> getCurrentMeetings(Long startId) {
+        List<MeetingDto> meetingDtos = meetingRepository.findAll().stream()
+                .limit(startId+20)
+                .filter(o->o.getStartDate().isBefore(LocalDate.now()))
+                .filter(o->o.getFinishDate().isAfter(LocalDate.now()))
+                .map(mapToMeetingDto)
+                .collect(Collectors.toList());
+        Collections.reverse(meetingDtos);
+        return meetingDtos.subList(0,20);
+    }
+
+    @Override
+    public List<MeetingDto> getFutureMeetings(Long startId) {
+        List<MeetingDto> meetingDtos = meetingRepository.findAll().stream()
+                .limit(startId+20)
+                .filter(o->o.getStartDate().isAfter(LocalDate.now()))
+                .map(mapToMeetingDto)
+                .collect(Collectors.toList());
+        Collections.reverse(meetingDtos);
+        return meetingDtos.subList(0,20);
     }
 
 

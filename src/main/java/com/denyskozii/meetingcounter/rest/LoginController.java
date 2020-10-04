@@ -64,7 +64,7 @@ public class LoginController {
     /**
      * login user from Google auth with token.
      */
-    @PostMapping("/google-login")
+    @PostMapping("/googleLogin")
     public ResponseEntity<String> googleLoginPost(@RequestParam String token) throws IOException {
         try (CloseableHttpClient client = HttpClientBuilder.create().build()) {
             var request = new HttpGet("https://www.googleapis.com/oauth2/v3/tokeninfo?id_token=" + token);

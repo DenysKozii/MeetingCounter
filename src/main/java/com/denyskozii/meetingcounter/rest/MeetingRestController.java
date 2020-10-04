@@ -1,6 +1,7 @@
 package com.denyskozii.meetingcounter.rest;
 
 
+import com.denyskozii.meetingcounter.dto.GenerateMeetingDto;
 import com.denyskozii.meetingcounter.dto.MeetingDto;
 import com.denyskozii.meetingcounter.dto.ResponseStatus;
 import com.denyskozii.meetingcounter.dto.UserDto;
@@ -40,51 +41,79 @@ public class MeetingRestController {
     }
 
 
+//    /**
+//     * return all meeting from concrete user.
+//     */
+//    @GetMapping("/get/current")
+//    @PreAuthorize("hasAuthority('USER')")
+//    public List<MeetingDto> getMeetingsByUser(@AuthenticationPrincipal UserDto user) {
+//        log.info("Get meetings by user " + user);
+//        return meetingService.getMeetingsByUserId(user.getId()).stream()
+//                .filter(o -> o.getFinishDate().isAfter(LocalDate.now()))
+//                .filter(o -> o.getStartDate().isBefore(LocalDate.now()))
+//                .collect(Collectors.toList());
+//    }
 
-    /**
-     * return all meeting from concrete user.
-     */
-    @GetMapping("/get")
-    @PreAuthorize("hasAuthority('USER')")
-    public List<MeetingDto> getMeetingsByUser(@AuthenticationPrincipal UserDto user) {
-        log.info("Get meetings by user " + user);
-        return meetingService.getMeetingsByUserId(user.getId());
-    }
 
-    /**
-     * return all meeting from concrete user.
-     */
-    @GetMapping("/get/future")
-    @PreAuthorize("hasAuthority('USER')")
-    public List<MeetingDto> getFutureMeetingsByUser(@AuthenticationPrincipal UserDto user) {
-        log.info("Get meetings by user " + user);
-        return meetingService.getMeetingsByUserId(user.getId()).stream()
-                .filter(o->o.getFinishDate()
-                        .isAfter(LocalDate.now()))
-                .collect(Collectors.toList());
-    }
+//    // my current, my future,  my created, current, future
+//    // current+future
+//
+//    /**
+//     * return all meeting from concrete user.
+//     */
+//    @GetMapping("/get/future")
+//    @PreAuthorize("hasAuthority('USER')")
+//    public List<MeetingDto> getFutureMeetingsByUser(@AuthenticationPrincipal UserDto user) {
+//
+//        log.info("Get meetings by user " + user);
+//
+//
+//        return meetingService.getMeetingsByUserId(user.getId()).stream()
+//                .filter(o -> o.getFinishDate()
+//                        .isAfter(LocalDate.now()))
+//                .collect(Collectors.toList());
+//    }
 
-    /**
-     * return all meeting from concrete user.
-     */
-    @GetMapping("/myMeetings")
-    @PreAuthorize("hasAuthority('USER')")
-    public List<MeetingDto> getMyMeetings(@AuthenticationPrincipal UserDto user) {
-        log.info("Get meetings by user " + user);
-        return meetingService.getMeetingsByAuthorId(user.getId());
-    }
+
+//    /**
+//     * return all meeting from concrete user.
+//     */
+//    @GetMapping("/myMeetings")
+//    @PreAuthorize("hasAuthority('USER')")
+//    public List<MeetingDto> getMyMeetings(@AuthenticationPrincipal UserDto user) {
+//        log.info("Get meetings by user " + user);
+//        return meetingService.getMeetingsByAuthorId(user.getId());
+//    }
 
 
     /**
      * return 20 meetings from id for main list on the website.
      */
-    @GetMapping("/generate")
+    @GetMapping("/getList")
     @PreAuthorize("hasAuthority('USER')")
-    public List<MeetingDto> generateMeetings(@RequestParam long id,
-                                             @RequestParam String title) {
-        log.info("Generate meetings from " + id);
+    public List<MeetingDto> generateMeetings(@RequestParam Long startId,
+                                             @RequestParam String title,
+                                             @RequestParam GenerateMeetingDto generateMeetingDto,
+                                             @AuthenticationPrincipal UserDto user) {
+
+        log.info("Generate meetings from " + startId);
+
         MeetingDto meetingDto = meetingService.getMeetingByTitle(title);
-        return meetingDto == null ? meetingService.getGenerateMeetingsList(id) : Collections.singletonList(meetingDto);
+
+        if (meetingDto!=null)
+            return Collections.singletonList(meetingDto);
+        if (generateMeetingDto.getMyCurrent())
+            return meetingService.getCurrentMeetingsByUserId(user.getId(), startId);
+        if (generateMeetingDto.getMyCreated())
+            return meetingService.getMeetingsByAuthorId(user.getId(), startId);
+        if (generateMeetingDto.getMyFuture())
+            return meetingService.getFutureMeetingsByUserId(user.getId(), startId);
+        if (generateMeetingDto.getCurrent())
+            return meetingService.getCurrentMeetings(startId);
+        if (generateMeetingDto.getFuture())
+            return meetingService.getFutureMeetings(startId);
+
+        return meetingService.getAllMeetings(startId);
     }
 
     /**

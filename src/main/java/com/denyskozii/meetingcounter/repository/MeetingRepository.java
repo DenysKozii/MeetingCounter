@@ -2,6 +2,7 @@ package com.denyskozii.meetingcounter.repository;
 
 import com.denyskozii.meetingcounter.model.Meeting;
 import com.denyskozii.meetingcounter.model.User;
+import net.bytebuddy.TypeCache;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -35,4 +36,7 @@ public interface MeetingRepository extends JpaRepository<Meeting, Long> {
             "ORDER BY ID DESC " +
             "LIMIT :id+20 OFFSET :id", nativeQuery = true)
     List<Meeting> getGenerateMeetingsList(Long id);
+
+    @Override
+    List<Meeting> findAll();
 }

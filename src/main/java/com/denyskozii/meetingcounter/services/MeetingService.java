@@ -15,6 +15,7 @@ import java.util.function.Function;
  * @author Denys Kozii
  */
 public interface MeetingService {
+
     MeetingDto createOrUpdateMeeting(MeetingDto meetingDto);
 
     List<MeetingDto> getAll();
@@ -23,11 +24,19 @@ public interface MeetingService {
 
     MeetingDto getMeetingByTitle(String title);
 
-    List<MeetingDto> getGenerateMeetingsList(Long id);
+    List<MeetingDto> getAllMeetings(Long startId);
 
-    List<MeetingDto> getMeetingsByUserId(Long id);
+//    List<MeetingDto> getMeetingsByUserId(Long userId);
 
-    List<MeetingDto> getMeetingsByAuthorId(Long id);
+    List<MeetingDto> getMeetingsByAuthorId(Long userId, Long startId);
+
+    List<MeetingDto> getCurrentMeetingsByUserId(Long userId, Long startId);
+
+    List<MeetingDto> getFutureMeetingsByUserId(Long userId, Long startId);
+
+    List<MeetingDto> getCurrentMeetings( Long startId);
+
+    List<MeetingDto> getFutureMeetings( Long startId);
 
 
     Function<Meeting, MeetingDto> mapToMeetingDto = (meeting -> MeetingDto.builder()

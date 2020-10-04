@@ -98,6 +98,14 @@ public class UserRestController {
         return userService.getFriendsByUserId(user.getId());
     }
 
+
+    // add to friends
+//    @GetMapping("/friends")
+//    @PreAuthorize("hasAuthority('USER')")
+//    public List<UserDto> getFriends(@AuthenticationPrincipal UserDto user) {
+//        log.info("Get friends by user " + user);
+//        return userService.getFriendsByUserId(user.getId());
+//    }
     /**
      * return user information.
      */

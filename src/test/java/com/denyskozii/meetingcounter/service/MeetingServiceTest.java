@@ -107,9 +107,9 @@ public class MeetingServiceTest {
     }
 
     @Test
-    public void getGenerateMeetingsList() {
+    public void getAllMeetings() {
         MeetingDto meetingDto = getMeetingDto(1L,"FirstMeeting","none",0L,0D,0D,10D,12);
-        List<MeetingDto> actual = meetingService.getGenerateMeetingsList(0L);
+        List<MeetingDto> actual = meetingService.getAllMeetings(0L);
 
         assertEquals(List.of(meetingDto), actual);
 //        assertThrows(EntityNotFoundException.class, () -> meetingService.getMeetingById(ID_NO_EXIST));
