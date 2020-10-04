@@ -52,7 +52,7 @@ public class UserRestController {
     /**
      * Calls to check if user already in concrete meeting.
      */
-    @PostMapping("/isInRadius/{meetingId}")
+    @PostMapping("/isInRadius")
     @PreAuthorize("hasAuthority('USER')")
     public boolean isUserInMeetingRadius(@RequestParam Long meetingId,
                                          @RequestBody HashMap<String, Double> coordinates,
