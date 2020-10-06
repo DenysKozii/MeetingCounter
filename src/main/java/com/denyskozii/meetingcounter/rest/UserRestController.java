@@ -46,7 +46,6 @@ public class UserRestController {
         return added ? new ResponseEntity<>(HttpStatus.OK) : new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
     }
 
-
     /**
      * Calls to check if user already in concrete meeting.
      */
@@ -56,7 +55,6 @@ public class UserRestController {
                                          @RequestBody HashMap<String, Double> coordinates,
                                          @AuthenticationPrincipal UserDto user) {
         log.info("Check if user added to meeting " + meetingId);
-//        return new ResponseStatus(HttpStatus.OK.value(), added ? "user already added" : "user is not here");
         return userService.checkUserAdded(user.getId(), coordinates.get("longitude"), coordinates.get("latitude"), meetingId);
     }
 
@@ -71,14 +69,6 @@ public class UserRestController {
     /**
      * return user information.
      */
-//    @GetMapping("/get")
-//    @PreAuthorize("hasAuthority('USER')")
-//    public UserDto getUser(HttpServletRequest request) {
-//        Long userId = Long.valueOf(request.getUserPrincipal().getName());
-//        log.info("Get user by id " + userId);
-//        return userService.getUserById(userId);
-//    }
-
     @GetMapping("/current")
     @PreAuthorize("hasAuthority('USER')")
     public UserDto getUser(@AuthenticationPrincipal UserDto user) {
@@ -86,34 +76,8 @@ public class UserRestController {
         return user;
     }
 
-    /**
-     * return user information.
-     */
-    @GetMapping("/friends")
-    @PreAuthorize("hasAuthority('USER')")
-    public List<UserDto> getFriends(@AuthenticationPrincipal UserDto user) {
-        log.info("Get friends by user " + user);
-        return userService.getFriendsByUserId(user.getId());
-    }
 
 
-    // add to friends
-//    @GetMapping("/friends")
-//    @PreAuthorize("hasAuthority('USER')")
-//    public List<UserDto> getFriends(@AuthenticationPrincipal UserDto user) {
-//        log.info("Get friends by user " + user);
-//        return userService.getFriendsByUserId(user.getId());
-//    }
-    /**
-     * return user information.
-     */
-    @GetMapping("/friends/subscribedTo")
-    @PreAuthorize("hasAuthority('USER')")
-    public List<UserDto> getFriends(@RequestParam Long meetingId,
-                                    @AuthenticationPrincipal UserDto user) {
-        log.info("Get friends by user " + user);
-        return userService.getFriendsByUserIdAndMeetingId(user.getId(), meetingId);
-    }
 
     /**
      * test connection.

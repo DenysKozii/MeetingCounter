@@ -9,6 +9,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.validation.constraints.Email;
 import java.util.List;
+import java.util.Optional;
+
 /**
  * Date: 07.09.2020
  *
@@ -24,13 +26,11 @@ public interface UserRepository extends JpaRepository<User, Long> {
 //                    ")", nativeQuery = true)
 //    List<User> getAllByMeetingId(@Param("meetingId") Long meetingId);
 
-    User findByEmail(@Email(message = "Wrong email format") String email);
+    Optional<User> findByEmail(@Email(message = "Wrong email format") String email);
 
     List<User> getAllByRole(Role role);
 
-    User findByFirstNameAndLastName(String firstName, String lastName);
-
-    User findByEmailAndFirstNameAndLastName(String email, String firstName, String lastName);
+    Optional<User> findByEmailAndFirstNameAndLastName(String email, String firstName, String lastName);
 
     @Transactional
     @Query(value = "SELECT COUNT(*) FROM meeting_user " +

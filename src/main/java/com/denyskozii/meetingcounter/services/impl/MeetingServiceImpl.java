@@ -1,6 +1,5 @@
 package com.denyskozii.meetingcounter.services.impl;
 
-import com.denyskozii.meetingcounter.dto.UserDto;
 import com.denyskozii.meetingcounter.model.User;
 import com.denyskozii.meetingcounter.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -9,16 +8,12 @@ import com.denyskozii.meetingcounter.model.Meeting;
 import com.denyskozii.meetingcounter.repository.MeetingRepository;
 import com.denyskozii.meetingcounter.services.MeetingService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.core.HashOperations;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
 import javax.validation.Validator;
-import java.lang.reflect.Array;
 import java.time.LocalDate;
 import java.util.*;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 /**
@@ -60,12 +55,10 @@ public class MeetingServiceImpl implements MeetingService {
     }
 
     @Override
-    public MeetingDto createOrUpdateMeeting(MeetingDto meetingDto) throws EntityNotFoundException{
-        Meeting meeting = meetingRepository.findById(meetingDto.getId())
-                .orElseThrow(() -> new EntityNotFoundException("Meeting with id " + meetingDto.getId() + " doesn't exists!"));
-
-        if (meeting == null) {
-            meeting = new Meeting(meetingDto.getTitle(),
+    public MeetingDto createMeeting(MeetingDto meetingDto) throws EntityNotFoundException{
+        Optional<Meeting> meetingOptional = meetingRepository.findById(meetingDto.getId());
+        if (meetingOptional.isEmpty()) {
+            Meeting meeting = new Meeting(meetingDto.getTitle(),
                     meetingDto.getDescription(),
                     meetingDto.getHereAmount(),
                     meetingDto.getLongitude(),
@@ -77,8 +70,32 @@ public class MeetingServiceImpl implements MeetingService {
                 return mapToMeetingDto.apply(meeting);
             }
         }
-        meetingRepository.save(meeting);
-        return mapToMeetingDto.apply(meeting);
+        return meetingDto;
+    }
+
+    @Override
+    public boolean updateMeeting(MeetingDto meetingDto) {
+        Meeting meeting = meetingRepository.findById(meetingDto.getId())
+                .orElseThrow(() -> new EntityNotFoundException("Meeting with id " + meetingDto.getId() + " doesn't exists!"));
+        meeting.setTitle(meetingDto.getTitle());
+        meeting.setAvailableDistance(meetingDto.getAvailableDistance());
+        meeting.setDescription(meetingDto.getDescription());
+        meeting.setFinishDate(meetingDto.getFinishDate());
+        meeting.setHereAmount(meetingDto.getHereAmount());
+        meeting.setLatitude(meetingDto.getLatitude());
+        meeting.setLongitude(meetingDto.getLongitude());
+        meeting.setStartDate(meetingDto.getStartDate());
+        if (validator.validate(meeting).size() == 0) {
+            meetingRepository.save(meeting);
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public boolean deleteMeeting(Long meetingId) {
+        meetingRepository.deleteById(meetingId);
+        return true;
     }
 
     @Override
@@ -102,14 +119,6 @@ public class MeetingServiceImpl implements MeetingService {
         return meetingDtos.subList(0, Math.min(meetingDtos.size(), 20));
     }
 
-//    @Override
-//    public List<MeetingDto> getMeetingsByUserId(Long id) {
-//        User user = userRepository.findById(id)
-//                .orElseThrow(() -> new EntityNotFoundException("User with id " + id + " doesn't exists!"));
-//        return user.getMeetings().stream()
-//                .map(mapToMeetingDto)
-//                .collect(Collectors.toList());
-//    }
 
     @Override
     public List<MeetingDto> getMeetingsByAuthorId(Long userId, Long startId) {
@@ -171,6 +180,16 @@ public class MeetingServiceImpl implements MeetingService {
                 .collect(Collectors.toList());
         Collections.reverse(meetingDtos);
         return meetingDtos.subList(0,Math.min(meetingDtos.size(), 20));
+    }
+
+    @Override
+    public List<MeetingDto> getMeetingsFromFriendsByUserId(Long userId, Long startId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new EntityNotFoundException("User with id " + userId + " doesn't exists!"));
+        return user.getFriends().stream()
+                .flatMap(o->o.getMyMeetings().stream()
+                        .map(mapToMeetingDto))
+                .collect(Collectors.toList());
     }
 
 

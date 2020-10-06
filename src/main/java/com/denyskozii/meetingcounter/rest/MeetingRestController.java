@@ -4,9 +4,11 @@ package com.denyskozii.meetingcounter.rest;
 import com.denyskozii.meetingcounter.dto.GenerateMeetingDto;
 import com.denyskozii.meetingcounter.dto.MeetingDto;
 import com.denyskozii.meetingcounter.dto.UserDto;
+import com.denyskozii.meetingcounter.model.User;
 import com.denyskozii.meetingcounter.services.MeetingService;
 import com.denyskozii.meetingcounter.services.UserService;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.logging.log4j.message.StringFormattedMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -38,51 +40,6 @@ public class MeetingRestController {
     }
 
 
-//    /**
-//     * return all meeting from concrete user.
-//     */
-//    @GetMapping("/get/current")
-//    @PreAuthorize("hasAuthority('USER')")
-//    public List<MeetingDto> getMeetingsByUser(@AuthenticationPrincipal UserDto user) {
-//        log.info("Get meetings by user " + user);
-//        return meetingService.getMeetingsByUserId(user.getId()).stream()
-//                .filter(o -> o.getFinishDate().isAfter(LocalDate.now()))
-//                .filter(o -> o.getStartDate().isBefore(LocalDate.now()))
-//                .collect(Collectors.toList());
-//    }
-
-
-//    // my current, my future,  my created, current, future
-//    // current+future
-//
-//    /**
-//     * return all meeting from concrete user.
-//     */
-//    @GetMapping("/get/future")
-//    @PreAuthorize("hasAuthority('USER')")
-//    public List<MeetingDto> getFutureMeetingsByUser(@AuthenticationPrincipal UserDto user) {
-//
-//        log.info("Get meetings by user " + user);
-//
-//
-//        return meetingService.getMeetingsByUserId(user.getId()).stream()
-//                .filter(o -> o.getFinishDate()
-//                        .isAfter(LocalDate.now()))
-//                .collect(Collectors.toList());
-//    }
-
-
-//    /**
-//     * return all meeting from concrete user.
-//     */
-//    @GetMapping("/myMeetings")
-//    @PreAuthorize("hasAuthority('USER')")
-//    public List<MeetingDto> getMyMeetings(@AuthenticationPrincipal UserDto user) {
-//        log.info("Get meetings by user " + user);
-//        return meetingService.getMeetingsByAuthorId(user.getId());
-//    }
-
-
     /**
      * return 20 meetings from id for main list on the website.
      */
@@ -109,9 +66,12 @@ public class MeetingRestController {
             return meetingService.getCurrentMeetings(startId);
         if (generateMeetingDto.getFuture())
             return meetingService.getFutureMeetings(startId);
+        if(generateMeetingDto.getFriendsCreated())
+            return meetingService.getMeetingsFromFriendsByUserId(user.getId(), startId);
 
         return meetingService.getAllMeetings(startId);
     }
+
 
     /**
      * create new meeting by Dto.
@@ -121,8 +81,16 @@ public class MeetingRestController {
     public ResponseEntity<?> createMeeting(@RequestBody MeetingDto meetingDto, @AuthenticationPrincipal UserDto user) {
         meetingDto.setAuthor(user);
         log.info("Create meeting " + meetingDto);
-        meetingService.createOrUpdateMeeting(meetingDto);
-        return new ResponseEntity<>(HttpStatus.OK);
+        boolean updated = meetingService.updateMeeting(meetingDto);
+        return updated ? new ResponseEntity<>(HttpStatus.OK) : new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
     }
 
+    @PostMapping("/delete")
+    @PreAuthorize("hasAuthority('USER')")
+    public ResponseEntity<?> deleteMeeting(@RequestBody MeetingDto meetingDto, @AuthenticationPrincipal UserDto user) {
+        meetingDto.setAuthor(user);
+        log.info("Create meeting " + meetingDto);
+        boolean deleted = meetingService.deleteMeeting(meetingDto.getId());
+        return deleted ? new ResponseEntity<>(HttpStatus.OK) : new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
+    }
 }

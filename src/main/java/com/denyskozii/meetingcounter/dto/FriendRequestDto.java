@@ -7,22 +7,18 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(value = PropertyNamingStrategy.SnakeCaseStrategy.class)
-public class GenerateMeetingDto {
-
-    private Boolean myCurrent;
-
-    private Boolean myFuture;
-
-    private Boolean myCreated;
-
-    private Boolean current;
-
-    private Boolean future;
-
-    private Boolean friendsCreated;
+public class FriendRequestDto {
+    private Long id;
+//    private List<UserDto> invitor;
+//    private List<UserDto> acceptor;
+    private String invitorEmail;
+    private String acceptorEmail;
+    private Boolean status = false;
 }

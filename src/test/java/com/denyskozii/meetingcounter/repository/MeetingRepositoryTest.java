@@ -30,7 +30,7 @@ public class MeetingRepositoryTest {
 //        this.meetingRepository = meetingRepository;
 //    }
     private List<Meeting> loadDb() {
-        User user = new User(1L,"Denys", "Kozii","denys.kozii@gmail.com","123123","123123", Role.USER, Date.valueOf(LocalDate.now()),new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
+        User user = new User(1L,"Denys", "Kozii","denys.kozii@gmail.com","123123","123123", Role.USER, Date.valueOf(LocalDate.now()),new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
         userRepository.save(user);
         Meeting meeting1 = new Meeting();
         meeting1.setTitle("First");

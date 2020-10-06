@@ -1,11 +1,9 @@
 package com.denyskozii.meetingcounter.services;
 
 import com.denyskozii.meetingcounter.dto.MeetingDto;
-import com.denyskozii.meetingcounter.dto.UserDto;
 import com.denyskozii.meetingcounter.exception.EntityNotFoundException;
 import com.denyskozii.meetingcounter.model.Meeting;
 
-import java.time.LocalDate;
 import java.util.List;
 import java.util.function.Function;
 
@@ -16,7 +14,11 @@ import java.util.function.Function;
  */
 public interface MeetingService {
 
-    MeetingDto createOrUpdateMeeting(MeetingDto meetingDto);
+    MeetingDto createMeeting(MeetingDto meetingDto);
+
+    boolean updateMeeting(MeetingDto meetingDto);
+
+    boolean deleteMeeting(Long meetingId);
 
     List<MeetingDto> getAll();
 
@@ -26,18 +28,17 @@ public interface MeetingService {
 
     List<MeetingDto> getAllMeetings(Long startId);
 
-//    List<MeetingDto> getMeetingsByUserId(Long userId);
-
     List<MeetingDto> getMeetingsByAuthorId(Long userId, Long startId);
 
     List<MeetingDto> getCurrentMeetingsByUserId(Long userId, Long startId);
 
     List<MeetingDto> getFutureMeetingsByUserId(Long userId, Long startId);
 
-    List<MeetingDto> getCurrentMeetings( Long startId);
+    List<MeetingDto> getCurrentMeetings(Long startId);
 
-    List<MeetingDto> getFutureMeetings( Long startId);
+    List<MeetingDto> getFutureMeetings(Long startId);
 
+    List<MeetingDto> getMeetingsFromFriendsByUserId(Long userId, Long startId);
 
     Function<Meeting, MeetingDto> mapToMeetingDto = (meeting -> MeetingDto.builder()
             .id(meeting.getId())

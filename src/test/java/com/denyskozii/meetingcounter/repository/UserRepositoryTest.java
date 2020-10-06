@@ -79,7 +79,7 @@ public class UserRepositoryTest {
         expected.setPassword("useruser");
 
         userRepository.save(expected);
-        User actual = userRepository.findByEmail("user@gmail.com");
+        User actual = userRepository.findByEmail("user@gmail.com").get();
 
         Assertions.assertEquals(expected, actual);
     }

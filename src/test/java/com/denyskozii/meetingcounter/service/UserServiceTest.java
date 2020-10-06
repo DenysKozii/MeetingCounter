@@ -44,9 +44,8 @@ public class UserServiceTest {
     @BeforeEach
     public void setUp() {
         userService = new UserServiceImpl(userRepository,meetingRepository/*,redisTemplate*/);
-        User user = new User(1L,"Denys", "Kozii","denys.kozii@gmail.com","123123","123123", Role.USER, Date.valueOf(LocalDate.now()),new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
+        User user = new User(1L,"Denys", "Kozii","denys.kozii@gmail.com","123123","123123", Role.USER, Date.valueOf(LocalDate.now()),new ArrayList<>(), new ArrayList<>(), new ArrayList<>(),new ArrayList<>(), new ArrayList<>());
         doReturn(Optional.of(user)).when(userRepository).findById(1L);
-        doReturn(user).when(userRepository).findByFirstNameAndLastName("Denys", "Kozii");
     }
 
     private UserDto getUserDto (Long id,
@@ -77,9 +76,5 @@ public class UserServiceTest {
 
         assertEquals(userDto, actual);
     }
-    @Test
-    public void getUserIdByName() {
-        Long actual = userService.getUserIdByName("Denys Kozii");
-        assertEquals(1L, actual);
-    }
+
 }

@@ -90,4 +90,21 @@ public class User  {
             inverseJoinColumns = @JoinColumn(name = "friend_id", referencedColumnName="id"))
     private List<User> friends;
 
+
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "invite_friend",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "friend_id", referencedColumnName="id"))
+    private List<FriendRequest> invite;
+
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "accept_friend",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "friend_id", referencedColumnName="id"))
+    private List<FriendRequest> accept;
+
 }

@@ -16,7 +16,7 @@ public interface UserService {
 
     UserDto getUserById(Long id);
 
-    Long getUserIdByName(String userFullName);
+    UserDto getUserByEmail(String email);
 
     List<UserDto> getFriendsByUserId(Long id);
 
