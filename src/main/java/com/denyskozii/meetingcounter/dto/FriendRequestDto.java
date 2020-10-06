@@ -16,8 +16,6 @@ import java.util.List;
 @JsonNaming(value = PropertyNamingStrategy.SnakeCaseStrategy.class)
 public class FriendRequestDto {
     private Long id;
-//    private List<UserDto> invitor;
-//    private List<UserDto> acceptor;
     private String invitorEmail;
     private String acceptorEmail;
     private Boolean status = false;

@@ -16,6 +16,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -56,20 +57,33 @@ public class MeetingRestController {
 
         if (meetingDto!=null)
             return Collections.singletonList(meetingDto);
-        if (generateMeetingDto.getMyCurrent())
-            return meetingService.getCurrentMeetingsByUserId(user.getId(), startId);
-        if (generateMeetingDto.getMyCreated())
-            return meetingService.getMeetingsByAuthorId(user.getId(), startId);
-        if (generateMeetingDto.getMyFuture())
-            return meetingService.getFutureMeetingsByUserId(user.getId(), startId);
-        if (generateMeetingDto.getCurrent())
-            return meetingService.getCurrentMeetings(startId);
-        if (generateMeetingDto.getFuture())
-            return meetingService.getFutureMeetings(startId);
-        if(generateMeetingDto.getFriendsCreated())
-            return meetingService.getMeetingsFromFriendsByUserId(user.getId(), startId);
 
-        return meetingService.getAllMeetings(startId);
+        boolean myCurrent = generateMeetingDto.getMyCurrent();
+        boolean myCreated = generateMeetingDto.getMyCreated();
+        boolean myFuture = generateMeetingDto.getMyFuture();
+        boolean current = generateMeetingDto.getCurrent();
+        boolean future = generateMeetingDto.getFuture();
+        boolean friendCreated = generateMeetingDto.getFriendsCreated();
+
+        if(!myCurrent && !myCreated && !myFuture && !current && !future && !friendCreated)
+            return meetingService.getAllMeetings(startId);
+
+
+        List<MeetingDto> result = new ArrayList<>();
+
+        if (myCurrent)
+            result.addAll(meetingService.getCurrentMeetingsByUserId(user.getId(), startId));
+        if (myCreated)
+            result.addAll(meetingService.getMeetingsByAuthorId(user.getId(), startId));
+        if (myFuture)
+            result.addAll(meetingService.getFutureMeetingsByUserId(user.getId(), startId));
+        if (current)
+            result.addAll(meetingService.getCurrentMeetings(startId));
+        if (future)
+            result.addAll(meetingService.getFutureMeetings(startId));
+        if  (friendCreated)
+            result.addAll(meetingService.getMeetingsFromFriendsByUserId(user.getId(), startId));
+        return result;
     }
 
 

@@ -75,4 +75,5 @@ public class FriendsRestController {
     public boolean removeFriend(@RequestParam String email, @AuthenticationPrincipal UserDto user) {
         return friendRequestService.removeByEmail(user.getEmail(), email);
     }
+
 }
