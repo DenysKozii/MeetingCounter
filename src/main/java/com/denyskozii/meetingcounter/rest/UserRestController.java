@@ -2,17 +2,15 @@ package com.denyskozii.meetingcounter.rest;
 
 
 import com.denyskozii.meetingcounter.dto.UserDto;
-import com.denyskozii.meetingcounter.model.User;
 import lombok.extern.slf4j.Slf4j;
-import com.denyskozii.meetingcounter.dto.ResponseStatus;
 import com.denyskozii.meetingcounter.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.List;
 
@@ -40,12 +38,12 @@ public class UserRestController {
      */
     @PostMapping("/add/{meetingId}")
     @PreAuthorize("hasAuthority('USER')")
-    public ResponseStatus addToMeeting(@PathVariable long meetingId,
+    public ResponseEntity<?> addToMeeting(@PathVariable long meetingId,
                                        @RequestBody HashMap<String, Double> coordinates,
                                        @AuthenticationPrincipal UserDto user) {
         log.info("Add user to meeting " + meetingId);
         boolean added = userService.addUserToMeeting(user.getId(), coordinates.get("longitude"), coordinates.get("latitude"), meetingId);
-        return new ResponseStatus(HttpStatus.OK.value(), added ? "user successfully added" : "user distance is incorrect");
+        return added ? new ResponseEntity<>(HttpStatus.OK) : new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
     }
 
 

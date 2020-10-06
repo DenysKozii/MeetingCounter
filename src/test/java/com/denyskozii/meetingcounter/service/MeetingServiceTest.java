@@ -73,14 +73,14 @@ public class MeetingServiceTest {
         assertEquals(1, 1);
     }
 
-    @Test
-    public void getByTitle() {
-        MeetingDto meetingDto = getMeetingDto(1L,"FirstMeeting","none",0L,0D,0D,10D,12);
-        MeetingDto actual = meetingService.getMeetingByTitle("FirstMeeting");
-
-        assertEquals(meetingDto, actual);
-//        assertThrows(EntityNotFoundException.class, () -> meetingService.getMeetingById(ID_NO_EXIST));
-    }
+//    @Test
+//    public void getByTitle() {
+//        MeetingDto meetingDto = getMeetingDto(1L,"FirstMeeting","none",0L,0D,0D,10D,12);
+//        MeetingDto actual = meetingService.getMeetingByTitle("FirstMeeting");
+//
+//        assertEquals(meetingDto, actual);
+////        assertThrows(EntityNotFoundException.class, () -> meetingService.getMeetingById(ID_NO_EXIST));
+//    }
     @Test
     public void getById() {
         MeetingDto meetingDto = getMeetingDto(1L,"FirstMeeting","none",0L,0D,0D,10D,12);

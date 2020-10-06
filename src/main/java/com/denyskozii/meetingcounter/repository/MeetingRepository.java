@@ -23,6 +23,7 @@ public interface MeetingRepository extends JpaRepository<Meeting, Long> {
     @Transactional(readOnly = true)
     Meeting findAllByTitleContainingOrderByStartDate(String title);
 
+    Meeting findAllByTitleIsContaining(String title);
 
     @Transactional
     @Modifying

@@ -103,7 +103,7 @@ public class UserRepositoryTest {
     @Test
     public void testFindById() {
         User expected = loadDb().get(0);
-        User actual = userRepository.findById(18L).orElse(null);
+        User actual = userRepository.findById(1L).orElse(null);
 
         Assertions.assertEquals(expected, actual);
     }

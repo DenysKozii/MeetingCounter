@@ -56,7 +56,7 @@ public interface UserService {
             .email(user.getEmail())
             .password(user.getPassword())
             .expirationDate(user.getExpirationDate())
-            .role(user.getRole())
+            .role(user.getRole().getAuthority())
             .build());
 
 }

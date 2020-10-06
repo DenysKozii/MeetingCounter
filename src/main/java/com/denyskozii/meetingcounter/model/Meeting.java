@@ -62,27 +62,16 @@ public class Meeting {
 
 
     @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     @ManyToMany(mappedBy = "meetings",
             cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<User> users;
 
 
     @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="user_id", nullable=false)
     private User author;
 
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Meeting)) return false;
-        Meeting meeting = (Meeting) o;
-        return Objects.equals(getTitle(), meeting.getTitle());
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(getTitle());
-    }
 }

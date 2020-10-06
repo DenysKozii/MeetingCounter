@@ -2,12 +2,8 @@ package com.denyskozii.meetingcounter.rest;
 
 
 import com.denyskozii.meetingcounter.dto.UserDto;
-import com.denyskozii.meetingcounter.dto.UserLoginDto;
 import com.denyskozii.meetingcounter.services.UserService;
-import com.denyskozii.meetingcounter.dto.ResponseStatus;
-import com.denyskozii.meetingcounter.dto.TokenDto;
 import com.denyskozii.meetingcounter.jwt.JwtProvider;
-import com.mysql.cj.x.protobuf.Mysqlx;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;

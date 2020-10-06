@@ -71,6 +71,8 @@ public class UserServiceTest {
     @Test
     public void getById() {
         UserDto userDto = getUserDto(1L,"Denys","Kozii","denys.kozii@gmail.com","123123");
+        userDto.setExpirationDate(Date.valueOf(LocalDate.now()));
+        userDto.setRole(Role.USER.getAuthority());
         UserDto actual = userService.getUserById(1L);
 
         assertEquals(userDto, actual);

@@ -83,6 +83,7 @@ public class MeetingServiceImpl implements MeetingService {
 
     @Override
     public MeetingDto getMeetingByTitle(String title) {
+
         Meeting meeting = meetingRepository.findAllByTitleContainingOrderByStartDate(title);
         return meeting == null ? null : mapToMeetingDto.apply(meeting);
     }
@@ -98,7 +99,7 @@ public class MeetingServiceImpl implements MeetingService {
                 .map(mapToMeetingDto)
                 .collect(Collectors.toList());
         Collections.reverse(meetingDtos);
-        return meetingDtos.subList(0,20);
+        return meetingDtos.subList(0, Math.min(meetingDtos.size(), 20));
     }
 
 //    @Override
@@ -119,7 +120,7 @@ public class MeetingServiceImpl implements MeetingService {
                 .map(mapToMeetingDto)
                 .collect(Collectors.toList());
         Collections.reverse(meetingDtos);
-        return meetingDtos.subList(0,20);
+        return meetingDtos.subList(0,Math.min(meetingDtos.size(), 20));
     }
 
     @Override
@@ -133,7 +134,7 @@ public class MeetingServiceImpl implements MeetingService {
                 .map(mapToMeetingDto)
                 .collect(Collectors.toList());
         Collections.reverse(meetingDtos);
-        return meetingDtos.subList(0,20);
+        return meetingDtos.subList(0,Math.min(meetingDtos.size(), 20));
     }
 
     @Override
@@ -146,7 +147,7 @@ public class MeetingServiceImpl implements MeetingService {
                 .map(mapToMeetingDto)
                 .collect(Collectors.toList());
         Collections.reverse(meetingDtos);
-        return meetingDtos.subList(0,20);
+        return meetingDtos.subList(0,Math.min(meetingDtos.size(), 20));
     }
 
     @Override
@@ -158,7 +159,7 @@ public class MeetingServiceImpl implements MeetingService {
                 .map(mapToMeetingDto)
                 .collect(Collectors.toList());
         Collections.reverse(meetingDtos);
-        return meetingDtos.subList(0,20);
+        return meetingDtos.subList(0,Math.min(meetingDtos.size(), 20));
     }
 
     @Override
@@ -169,7 +170,7 @@ public class MeetingServiceImpl implements MeetingService {
                 .map(mapToMeetingDto)
                 .collect(Collectors.toList());
         Collections.reverse(meetingDtos);
-        return meetingDtos.subList(0,20);
+        return meetingDtos.subList(0,Math.min(meetingDtos.size(), 20));
     }
 
 

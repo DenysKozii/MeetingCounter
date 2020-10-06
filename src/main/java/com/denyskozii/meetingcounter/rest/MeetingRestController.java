@@ -3,22 +3,19 @@ package com.denyskozii.meetingcounter.rest;
 
 import com.denyskozii.meetingcounter.dto.GenerateMeetingDto;
 import com.denyskozii.meetingcounter.dto.MeetingDto;
-import com.denyskozii.meetingcounter.dto.ResponseStatus;
 import com.denyskozii.meetingcounter.dto.UserDto;
 import com.denyskozii.meetingcounter.services.MeetingService;
 import com.denyskozii.meetingcounter.services.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
-import java.time.LocalDate;
 import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * Date: 07.09.2020
@@ -121,11 +118,11 @@ public class MeetingRestController {
      */
     @PostMapping("/create")
     @PreAuthorize("hasAuthority('USER')")
-    public ResponseStatus createMeeting(@RequestBody MeetingDto meetingDto, @AuthenticationPrincipal UserDto user) {
-        meetingDto.setAuthor(userService.mapToUser.apply(user));
+    public ResponseEntity<?> createMeeting(@RequestBody MeetingDto meetingDto, @AuthenticationPrincipal UserDto user) {
+        meetingDto.setAuthor(user);
         log.info("Create meeting " + meetingDto);
         meetingService.createOrUpdateMeeting(meetingDto);
-        return new ResponseStatus(HttpStatus.OK.value());
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
 }

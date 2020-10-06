@@ -56,19 +56,16 @@ public class User  {
 
     @NonNull
     @NotNull
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     @Enumerated(EnumType.STRING)
     private Role role;
-
-//    @NonNull
-//    @NotNull
-//    @Enumerated(EnumType.STRING)
-//    private PasswordType passwordType = PasswordType.WITH_PASSWORD;
-
 
     @Transient
     private Date expirationDate;
 
     @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "meeting_user",
             joinColumns = @JoinColumn(name = "user_id"),
@@ -76,6 +73,7 @@ public class User  {
     private List<Meeting> meetings ;
 
     @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     @OneToMany(
             mappedBy = "author",
             cascade = CascadeType.ALL,
@@ -85,31 +83,11 @@ public class User  {
 
 
     @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "user_friend",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "friend_id", referencedColumnName="id"))
     private List<User> friends;
-
-
-    @Override
-    public boolean equals(Object o) {
-
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        User user = (User) o;
-        return Objects.equals(email, user.email) &&
-                Objects.equals(firstName, user.firstName) &&
-                Objects.equals(lastName, user.lastName) &&
-                Objects.equals(password, user.password) &&
-                role == user.role;
-
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(email, firstName, lastName, password, role);
-    }
-
 
 }

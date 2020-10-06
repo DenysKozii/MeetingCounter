@@ -1,7 +1,7 @@
 package com.denyskozii.meetingcounter.exception;
 
-import com.denyskozii.meetingcounter.dto.ResponseStatus;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.NoHandlerFoundException;
@@ -14,20 +14,20 @@ import org.springframework.web.servlet.NoHandlerFoundException;
 public class ApplicationExceptionHandler {
 
     @ExceptionHandler(EntityNotFoundException.class)
-    public ResponseStatus handlerClientError(Exception e){
+    public ResponseEntity<?> handlerClientError(Exception e){
         e.printStackTrace();
-        return new ResponseStatus(HttpStatus.NOT_FOUND.value(), e.getMessage());
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(NoHandlerFoundException.class)
-    public ResponseStatus handlerPageNotFound(Exception e){
+    public ResponseEntity<?> handlerPageNotFound(Exception e){
         e.printStackTrace();
-        return new ResponseStatus(HttpStatus.BAD_REQUEST.value(), e.getMessage());
+        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(Exception.class)
-    public ResponseStatus handlerServerError(Exception e){
+    public ResponseEntity<?> handlerServerError(Exception e){
         e.printStackTrace();
-        return new ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
+        return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }

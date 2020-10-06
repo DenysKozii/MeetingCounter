@@ -23,7 +23,7 @@ import java.time.LocalDate;
 public class MeetingDto {
 
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
-    private long id;
+    private Long id;
 
     private String title;
 
@@ -43,7 +43,7 @@ public class MeetingDto {
 
     private LocalDate finishDate;
 
-    private User author;
+    private UserDto author;
 
 
 }
