@@ -99,18 +99,13 @@ public class MeetingServiceImpl implements MeetingService {
     }
 
     @Override
-    public MeetingDto getMeetingByTitle(String title) {
-
-        Meeting meeting = meetingRepository.findAllByTitleContainingOrderByStartDate(title);
-        return meeting == null ? null : mapToMeetingDto.apply(meeting);
+    public List<MeetingDto> getMeetingByTitle(String title) {
+        List<Meeting> meetings = meetingRepository.findAllByTitleContainingOrderByStartDate(title);
+        return meetings.stream().map(mapToMeetingDto).collect(Collectors.toList());
     }
 
     @Override
     public List<MeetingDto> getAllMeetings(Long startId) {
-//        return meetingRepository
-//                .getGenerateMeetingsList(id).stream()
-//                .map(mapToMeetingDto)
-//                .collect(Collectors.toList());
         List<MeetingDto> meetingDtos = meetingRepository.findAll().stream()
                 .limit(startId+20)
                 .map(mapToMeetingDto)

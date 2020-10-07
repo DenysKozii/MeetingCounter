@@ -32,12 +32,10 @@ import java.util.List;
 public class MeetingRestController {
 
     private final MeetingService meetingService;
-    private final UserService userService;
 
     @Autowired
-    public MeetingRestController(MeetingService meetingService, UserService userService) {
+    public MeetingRestController(MeetingService meetingService) {
         this.meetingService = meetingService;
-        this.userService = userService;
     }
 
 
@@ -53,10 +51,10 @@ public class MeetingRestController {
 
         log.info("Generate meetings from " + startId);
 
-        MeetingDto meetingDto = meetingService.getMeetingByTitle(title);
+        List<MeetingDto> meetingsByTitle = meetingService.getMeetingByTitle(title);
 
-        if (meetingDto!=null)
-            return Collections.singletonList(meetingDto);
+        if (meetingsByTitle.size()!=0)
+            return meetingsByTitle;
 
         boolean myCurrent = generateMeetingDto.getMyCurrent();
         boolean myCreated = generateMeetingDto.getMyCreated();
@@ -101,10 +99,9 @@ public class MeetingRestController {
 
     @PostMapping("/delete")
     @PreAuthorize("hasAuthority('USER')")
-    public ResponseEntity<?> deleteMeeting(@RequestBody MeetingDto meetingDto, @AuthenticationPrincipal UserDto user) {
-        meetingDto.setAuthor(user);
-        log.info("Create meeting " + meetingDto);
-        boolean deleted = meetingService.deleteMeeting(meetingDto.getId());
+    public ResponseEntity<?> deleteMeeting(@RequestParam Long meetingId) {
+        log.info("Delete meeting with id " + meetingId);
+        boolean deleted = meetingService.deleteMeeting(meetingId);
         return deleted ? new ResponseEntity<>(HttpStatus.OK) : new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
     }
 }

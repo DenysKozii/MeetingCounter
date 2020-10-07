@@ -45,7 +45,7 @@ public class MeetingServiceTest {
         meeting.setId(1L);
         doReturn(Optional.of(meeting)).when(meetingRepository).findById(1L);
         doReturn(List.of(meeting)).when(meetingRepository).findAll();
-        doReturn(List.of(meeting)).when(meetingRepository).getGenerateMeetingsList(0L);
+        doReturn(List.of(meeting)).when(meetingRepository).findAllByTitleContainingOrderByStartDate("FirstMeeting");
 
     }
     private MeetingDto getMeetingDto (Long id,
@@ -73,14 +73,15 @@ public class MeetingServiceTest {
         assertEquals(1, 1);
     }
 
-//    @Test
-//    public void getByTitle() {
-//        MeetingDto meetingDto = getMeetingDto(1L,"FirstMeeting","none",0L,0D,0D,10D,12);
-//        MeetingDto actual = meetingService.getMeetingByTitle("FirstMeeting");
-//
-//        assertEquals(meetingDto, actual);
-////        assertThrows(EntityNotFoundException.class, () -> meetingService.getMeetingById(ID_NO_EXIST));
-//    }
+    @Test
+    public void getByTitle() {
+        MeetingDto meetingDto = getMeetingDto(1L,"FirstMeeting","none",0L,0D,0D,10D,12);
+        List<MeetingDto> actual = meetingService.getMeetingByTitle("FirstMeeting");
+
+        assertEquals(meetingDto, actual.get(0));
+//        assertThrows(EntityNotFoundException.class, () -> meetingService.getMeetingById(ID_NO_EXIST));
+    }
+
     @Test
     public void getById() {
         MeetingDto meetingDto = getMeetingDto(1L,"FirstMeeting","none",0L,0D,0D,10D,12);

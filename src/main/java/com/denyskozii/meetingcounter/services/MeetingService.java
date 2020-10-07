@@ -24,7 +24,7 @@ public interface MeetingService {
 
     MeetingDto getMeetingById(Long id) throws EntityNotFoundException;
 
-    MeetingDto getMeetingByTitle(String title);
+    List<MeetingDto> getMeetingByTitle(String title);
 
     List<MeetingDto> getAllMeetings(Long startId);
 

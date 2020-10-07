@@ -21,22 +21,21 @@ import java.util.Optional;
 public interface MeetingRepository extends JpaRepository<Meeting, Long> {
 
     @Transactional(readOnly = true)
-    Meeting findAllByTitleContainingOrderByStartDate(String title);
-
-    Meeting findAllByTitleIsContaining(String title);
-
-    @Transactional
-    @Modifying
-    @Query(value = "UPDATE meetings  " +
-            " SET here_amount = here_amount + 1 " +
-            " where id = :id", nativeQuery = true)
-    void increaseHereAmountByMeetingId(Long id);
+    List<Meeting> findAllByTitleContainingOrderByStartDate(String title);
 
 
-    @Query(value = "SELECT * FROM meetings " +
-            "ORDER BY ID DESC " +
-            "LIMIT :id+20 OFFSET :id", nativeQuery = true)
-    List<Meeting> getGenerateMeetingsList(Long id);
+//    @Transactional
+//    @Modifying
+//    @Query(value = "UPDATE meetings  " +
+//            " SET here_amount = here_amount + 1 " +
+//            " where id = :id", nativeQuery = true)
+//    void increaseHereAmountByMeetingId(Long id);
+
+
+//    @Query(value = "SELECT * FROM meetings " +
+//            "ORDER BY ID DESC " +
+//            "LIMIT :id+20 OFFSET :id", nativeQuery = true)
+//    List<Meeting> getGenerateMeetingsList(Long id);
 
     @Override
     List<Meeting> findAll();
