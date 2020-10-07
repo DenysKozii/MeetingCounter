@@ -2,17 +2,14 @@ package com.denyskozii.meetingcounter.service;
 
 
 import com.denyskozii.meetingcounter.dto.MeetingDto;
-import com.denyskozii.meetingcounter.exception.EntityNotFoundException;
 import com.denyskozii.meetingcounter.model.Meeting;
 import com.denyskozii.meetingcounter.repository.MeetingRepository;
 import com.denyskozii.meetingcounter.repository.UserRepository;
 import com.denyskozii.meetingcounter.services.MeetingService;
 import com.denyskozii.meetingcounter.services.impl.MeetingServiceImpl;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockitoTestExecutionListener;
 import org.springframework.test.context.TestExecutionListeners;
@@ -76,7 +73,7 @@ public class MeetingServiceTest {
     @Test
     public void getByTitle() {
         MeetingDto meetingDto = getMeetingDto(1L,"FirstMeeting","none",0L,0D,0D,10D,12);
-        List<MeetingDto> actual = meetingService.getMeetingByTitle("FirstMeeting");
+        List<MeetingDto> actual = meetingService.getMeetingByTitle("FirstMeeting", 0L);
 
         assertEquals(meetingDto, actual.get(0));
 //        assertThrows(EntityNotFoundException.class, () -> meetingService.getMeetingById(ID_NO_EXIST));

@@ -19,10 +19,8 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-import org.springframework.core.annotation.Order;
 
 import java.util.Arrays;
-import java.util.Objects;
 /**
  * Date: 07.09.2020
  *
@@ -59,8 +57,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                     .authorizeRequests()
                     .antMatchers("/h2-console/**").permitAll()
-                    .antMatchers("/index", "/", "/form-login**", "/registration**", "/css/*", "/static/*").permitAll()
-                    .antMatchers("/students/*/**", "/marathons/*/**").hasAnyRole("ADMIN")
+                    .antMatchers("/", "/login", "/registration**","/googleLogin").permitAll()
                     .anyRequest().authenticated()
                 .and()
                     .logout()
@@ -84,7 +81,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.addAllowedOrigin("*");
         configuration.addAllowedHeader("*");
-        configuration.setAllowedMethods(Arrays.asList("GET","POST"));
+        configuration.setAllowedMethods(Arrays.asList("GET","POST","PUT","DELETE"));
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
 
         source.registerCorsConfiguration("/**", configuration);

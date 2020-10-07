@@ -4,11 +4,8 @@ package com.denyskozii.meetingcounter.rest;
 import com.denyskozii.meetingcounter.dto.GenerateMeetingDto;
 import com.denyskozii.meetingcounter.dto.MeetingDto;
 import com.denyskozii.meetingcounter.dto.UserDto;
-import com.denyskozii.meetingcounter.model.User;
 import com.denyskozii.meetingcounter.services.MeetingService;
-import com.denyskozii.meetingcounter.services.UserService;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.logging.log4j.message.StringFormattedMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,11 +13,11 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 /**
+ * Controller for managing meetings
+ *
  * Date: 07.09.2020
  *
  * @author Denys Kozii
@@ -40,7 +37,13 @@ public class MeetingRestController {
 
 
     /**
-     * return 20 meetings from id for main list on the website.
+     * return 20 meetings from id by title searcher or type for main list on the website.
+     *
+     * @param startId
+     * @param title
+     * @param generateMeetingDto
+     * @param user
+     * @return List<MeetingDto>
      */
     @GetMapping("/getList")
     @PreAuthorize("hasAuthority('USER')")
@@ -48,19 +51,23 @@ public class MeetingRestController {
                                              @RequestParam String title,
                                              @RequestParam GenerateMeetingDto generateMeetingDto,
                                              @AuthenticationPrincipal UserDto user) {
+        List<MeetingDto> meetingsByTitle = meetingService.getMeetingByTitle(title,startId);
 
-        log.info("Generate meetings from " + startId);
-
-        List<MeetingDto> meetingsByTitle = meetingService.getMeetingByTitle(title);
-
-        if (meetingsByTitle.size()!=0)
+        if (meetingsByTitle.size()!=0){
+            log.info("Find meeting by title " + title);
             return meetingsByTitle;
+        }
+        log.info("Generate meetings from " + startId);
         return meetingService.generateMeetings(generateMeetingDto, startId, user);
     }
 
 
     /**
-     * create new meeting by Dto.
+     * create new meeting by Dto
+     *
+     * @param meetingDto
+     * @param user
+     * @return ResponseEntity
      */
     @PostMapping("/create")
     @PreAuthorize("hasAuthority('USER')")
@@ -71,7 +78,13 @@ public class MeetingRestController {
         return updated ? new ResponseEntity<>(HttpStatus.OK) : new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
     }
 
-    @PostMapping("/delete")
+    /**
+     * delete meeting by id
+     *
+     * @param meetingId
+     * @return ResponseEntity
+     */
+    @DeleteMapping("/delete")
     @PreAuthorize("hasAuthority('USER')")
     public ResponseEntity<?> deleteMeeting(@RequestParam Long meetingId) {
         log.info("Delete meeting with id " + meetingId);

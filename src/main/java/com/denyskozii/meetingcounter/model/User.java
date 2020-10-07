@@ -1,15 +1,14 @@
 package com.denyskozii.meetingcounter.model;
 
 import lombok.*;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
-import java.util.*;
+import java.util.Date;
+import java.util.List;
 /**
  * Date: 07.09.2020
  *

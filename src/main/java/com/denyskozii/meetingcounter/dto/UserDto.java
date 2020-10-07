@@ -1,6 +1,5 @@
 package com.denyskozii.meetingcounter.dto;
 
-import com.denyskozii.meetingcounter.model.Role;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
@@ -13,7 +12,6 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import javax.persistence.Transient;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;

@@ -1,8 +1,8 @@
 package com.denyskozii.meetingcounter.rest;
 
 
-import com.denyskozii.meetingcounter.services.UserService;
 import com.denyskozii.meetingcounter.dto.UserDto;
+import com.denyskozii.meetingcounter.services.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 /**
+ * Controller for new user registration
+ *
  * Date: 07.09.2020
  *
  * @author Denys Kozii
@@ -26,8 +28,12 @@ public class RegistrationController {
 
     @Autowired
     UserService userService;
+
     /**
-     * register new user by form
+     * register new user from form
+     *
+     * @param userDto
+     * @return ResponseEntity
      */
     @PostMapping("/registration")
     public ResponseEntity<?> registrationPost(@RequestBody UserDto userDto) {

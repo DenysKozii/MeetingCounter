@@ -2,7 +2,6 @@ package com.denyskozii.meetingcounter.jwt;
 
 
 import com.denyskozii.meetingcounter.dto.UserDto;
-import com.denyskozii.meetingcounter.model.User;
 import com.denyskozii.meetingcounter.services.impl.UserServiceImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

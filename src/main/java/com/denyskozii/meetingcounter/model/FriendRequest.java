@@ -1,11 +1,11 @@
 package com.denyskozii.meetingcounter.model;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.NonNull;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Size;
-import java.util.List;
 
 @Entity
 @Data
@@ -17,17 +17,6 @@ public class FriendRequest {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-//    @ToString.Exclude
-//    @EqualsAndHashCode.Exclude
-//    @ManyToMany(mappedBy = "invite",
-//            cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-//    private List<User> invitor;
-
-//    @ToString.Exclude
-//    @EqualsAndHashCode.Exclude
-//    @ManyToMany(mappedBy = "accept",
-//            cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-//    private List<User> acceptor;
     @NonNull
     private String invitorEmail;
 

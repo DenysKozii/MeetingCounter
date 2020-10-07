@@ -1,8 +1,7 @@
 package com.denyskozii.meetingcounter.services.impl;
 
 //import com.denyskozii.meetingcounter.model.PasswordType;
-import com.denyskozii.meetingcounter.services.UserService;
-import lombok.extern.slf4j.Slf4j;
+
 import com.denyskozii.meetingcounter.dto.UserDto;
 import com.denyskozii.meetingcounter.exception.EntityNotFoundException;
 import com.denyskozii.meetingcounter.model.Meeting;
@@ -10,9 +9,9 @@ import com.denyskozii.meetingcounter.model.Role;
 import com.denyskozii.meetingcounter.model.User;
 import com.denyskozii.meetingcounter.repository.MeetingRepository;
 import com.denyskozii.meetingcounter.repository.UserRepository;
+import com.denyskozii.meetingcounter.services.UserService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.core.HashOperations;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -22,7 +21,6 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.validation.Validator;
 import java.util.List;
 import java.util.Optional;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 /**
  * Date: 07.09.2020
@@ -48,7 +46,6 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    private final static String DELIMITER = " ";
 
     @Autowired
     public UserServiceImpl(UserRepository userRepository, MeetingRepository meetingRepository/*, RedisTemplate<Long, Long> redisTemplate*/) {
@@ -185,23 +182,19 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     @Override
     public boolean login(String email, String password) {
-        User user = userRepository.findByEmail(email)
-                .orElseThrow(()->new EntityNotFoundException("User with email " + email + " not found"));
-        return /*user.getPassword().equals(password);*/ true;
+        Optional<User> user = userRepository.findByEmail(email);
+        return user.isPresent()/*&& user.getPassword().equals(password);*/ ;
     }
 
     @Override
     public boolean login(String email, String firstName, String lastName) {
-        User user = userRepository.findByEmailAndFirstNameAndLastName(email, firstName, lastName)
-                .orElseThrow(()->new EntityNotFoundException("User with email " + email + " not found"));
-
-        return true /*&& user.getPasswordType().equals(PasswordType.WITHOUT_PASSWORD)*/;
+        Optional<User> user = userRepository.findByEmailAndFirstNameAndLastName(email, firstName, lastName);
+        return user.isPresent();
     }
 
     @Override
     public boolean register(UserDto userDto) {
         User user = mapToUser.apply(userDto);
-//        user.setPasswordType(PasswordType.WITH_PASSWORD);
         Optional<User> userEntity = userRepository.findByEmail(user.getEmail());
         if (userEntity.isPresent() || validator.validate(user).size() != 0)
             return false;

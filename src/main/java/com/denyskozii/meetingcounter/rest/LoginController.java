@@ -2,24 +2,26 @@ package com.denyskozii.meetingcounter.rest;
 
 
 import com.denyskozii.meetingcounter.dto.UserDto;
-import com.denyskozii.meetingcounter.services.UserService;
 import com.denyskozii.meetingcounter.jwt.JwtProvider;
+import com.denyskozii.meetingcounter.services.UserService;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClientBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClientBuilder;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 /**
- * Date: 07.09.2020
+ * login and google login for user
+ *
+ * Date: 12.09.2020
  *
  * @author Denys Kozii
  */
@@ -38,13 +40,12 @@ public class LoginController {
     private String lastName;
     private String email;
 
-//    @GetMapping("/form-login")
-//    public ResponseStatus login() {
-//        return new ResponseStatus(200, "login complete");
-//    }
 
     /**
      * login user by Dto
+     *
+     * @param userLoginDto
+     * @return ResponseEntity
      */
     @PostMapping("/login")
     public ResponseEntity<String> loginPost(@RequestBody UserDto userLoginDto) {
@@ -57,8 +58,12 @@ public class LoginController {
         return new ResponseEntity<>(HttpStatus.CONFLICT);
     }
 
+
     /**
-     * login user from Google auth with token.
+     * login user from Google auth by token.
+     * @param token
+     * @return ResponseEntity
+     * @throws IOException
      */
     @PostMapping("/googleLogin")
     public ResponseEntity<String> googleLoginPost(@RequestParam String token) throws IOException {
@@ -83,13 +88,5 @@ public class LoginController {
             headers.setBasicAuth(jwtProvider.generateToken(email));
             return new ResponseEntity<>(headers, HttpStatus.OK);
         }
-    }
-
-    /**
-     * test connection.
-     */
-    @GetMapping("/hello")
-    public String hello() {
-        return "hello";
     }
 }

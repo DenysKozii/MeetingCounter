@@ -17,6 +17,8 @@ public class AccessDeniedController {
 
     /**
      * return 403 Access forbidden!
+     *
+     * @return ResponseEntity
      */
     @RequestMapping(path = "/access-denied", method = RequestMethod.GET)
     public  ResponseEntity<?> accessPage() {

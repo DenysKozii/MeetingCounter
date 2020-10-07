@@ -4,7 +4,6 @@ import com.denyskozii.meetingcounter.model.Role;
 import com.denyskozii.meetingcounter.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.validation.constraints.Email;
@@ -37,6 +36,4 @@ public interface UserRepository extends JpaRepository<User, Long> {
             "WHERE user_id = :userId AND  meeting_id = :meetingId", nativeQuery = true)
     boolean isUserSubscribedToMeeting(Long userId, Long meetingId);
 
-
-//    void addMeetingToUserById(Long userId, Long MeetingId);
 }
