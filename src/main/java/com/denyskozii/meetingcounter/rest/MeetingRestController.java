@@ -55,33 +55,7 @@ public class MeetingRestController {
 
         if (meetingsByTitle.size()!=0)
             return meetingsByTitle;
-
-        boolean myCurrent = generateMeetingDto.getMyCurrent();
-        boolean myCreated = generateMeetingDto.getMyCreated();
-        boolean myFuture = generateMeetingDto.getMyFuture();
-        boolean current = generateMeetingDto.getCurrent();
-        boolean future = generateMeetingDto.getFuture();
-        boolean friendCreated = generateMeetingDto.getFriendsCreated();
-
-        if(!myCurrent && !myCreated && !myFuture && !current && !future && !friendCreated)
-            return meetingService.getAllMeetings(startId);
-
-
-        List<MeetingDto> result = new ArrayList<>();
-
-        if (myCurrent)
-            result.addAll(meetingService.getCurrentMeetingsByUserId(user.getId(), startId));
-        if (myCreated)
-            result.addAll(meetingService.getMeetingsByAuthorId(user.getId(), startId));
-        if (myFuture)
-            result.addAll(meetingService.getFutureMeetingsByUserId(user.getId(), startId));
-        if (current)
-            result.addAll(meetingService.getCurrentMeetings(startId));
-        if (future)
-            result.addAll(meetingService.getFutureMeetings(startId));
-        if  (friendCreated)
-            result.addAll(meetingService.getMeetingsFromFriendsByUserId(user.getId(), startId));
-        return result;
+        return meetingService.generateMeetings(generateMeetingDto, startId, user);
     }
 
 

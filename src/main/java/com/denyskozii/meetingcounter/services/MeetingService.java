@@ -1,6 +1,8 @@
 package com.denyskozii.meetingcounter.services;
 
+import com.denyskozii.meetingcounter.dto.GenerateMeetingDto;
 import com.denyskozii.meetingcounter.dto.MeetingDto;
+import com.denyskozii.meetingcounter.dto.UserDto;
 import com.denyskozii.meetingcounter.exception.EntityNotFoundException;
 import com.denyskozii.meetingcounter.model.Meeting;
 
@@ -52,4 +54,6 @@ public interface MeetingService {
             .startDate(meeting.getStartDate())
             .finishDate(meeting.getFinishDate())
             .build());
+
+    List<MeetingDto> generateMeetings(GenerateMeetingDto generateMeetingDto, Long startId, UserDto user);
 }

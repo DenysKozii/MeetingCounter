@@ -1,5 +1,7 @@
 package com.denyskozii.meetingcounter.services.impl;
 
+import com.denyskozii.meetingcounter.dto.GenerateMeetingDto;
+import com.denyskozii.meetingcounter.dto.UserDto;
 import com.denyskozii.meetingcounter.model.User;
 import com.denyskozii.meetingcounter.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -185,6 +187,36 @@ public class MeetingServiceImpl implements MeetingService {
                 .flatMap(o->o.getMyMeetings().stream()
                         .map(mapToMeetingDto))
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<MeetingDto> generateMeetings(GenerateMeetingDto generateMeetingDto, Long startId, UserDto user) {
+        boolean myCurrent = generateMeetingDto.getMyCurrent();
+        boolean myCreated = generateMeetingDto.getMyCreated();
+        boolean myFuture = generateMeetingDto.getMyFuture();
+        boolean current = generateMeetingDto.getCurrent();
+        boolean future = generateMeetingDto.getFuture();
+        boolean friendCreated = generateMeetingDto.getFriendsCreated();
+
+        if(!myCurrent && !myCreated && !myFuture && !current && !future && !friendCreated)
+            return getAllMeetings(startId);
+
+
+        List<MeetingDto> result = new ArrayList<>();
+
+        if (myCurrent)
+            result.addAll(getCurrentMeetingsByUserId(user.getId(), startId));
+        if (myCreated)
+            result.addAll(getMeetingsByAuthorId(user.getId(), startId));
+        if (myFuture)
+            result.addAll(getFutureMeetingsByUserId(user.getId(), startId));
+        if (current)
+            result.addAll(getCurrentMeetings(startId));
+        if (future)
+            result.addAll(getFutureMeetings(startId));
+        if  (friendCreated)
+            result.addAll(getMeetingsFromFriendsByUserId(user.getId(), startId));
+        return result;
     }
 
 
