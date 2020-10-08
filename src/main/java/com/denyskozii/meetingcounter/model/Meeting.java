@@ -73,8 +73,8 @@ public class Meeting {
     private User author;
 
     public void removeUser(User user){
-        this.users.remove(user);
-        this.hereAmount-=1;
+        if(this.users.remove(user))
+            this.hereAmount-=1;
     }
 
 }
