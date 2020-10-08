@@ -72,4 +72,8 @@ public class Meeting {
     @JoinColumn(name="user_id", nullable=false)
     private User author;
 
+    public void removeUser(User user){
+        this.users.remove(user);
+    }
+
 }

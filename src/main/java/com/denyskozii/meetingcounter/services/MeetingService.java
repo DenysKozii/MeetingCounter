@@ -20,7 +20,7 @@ public interface MeetingService {
 
     boolean updateMeeting(MeetingDto meetingDto);
 
-    boolean deleteMeeting(Long meetingId);
+    boolean deleteMeeting(Long meetingId, Long userId);
 
     List<MeetingDto> getAll();
 

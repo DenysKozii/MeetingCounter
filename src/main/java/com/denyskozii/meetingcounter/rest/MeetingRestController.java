@@ -86,9 +86,9 @@ public class MeetingRestController {
      */
     @DeleteMapping("/delete")
     @PreAuthorize("hasAuthority('USER')")
-    public ResponseEntity<?> deleteMeeting(@RequestParam Long meetingId) {
+    public ResponseEntity<?> deleteMeeting(@RequestParam Long meetingId, @AuthenticationPrincipal UserDto user) {
         log.info("Delete meeting with id " + meetingId);
-        boolean deleted = meetingService.deleteMeeting(meetingId);
+        boolean deleted = meetingService.deleteMeeting(meetingId, user.getId());
         return deleted ? new ResponseEntity<>(HttpStatus.OK) : new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
     }
 }

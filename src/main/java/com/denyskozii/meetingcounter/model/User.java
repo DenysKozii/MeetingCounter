@@ -106,4 +106,5 @@ public class User  {
             inverseJoinColumns = @JoinColumn(name = "friend_id", referencedColumnName="id"))
     private List<FriendRequest> accept;
 
+
 }

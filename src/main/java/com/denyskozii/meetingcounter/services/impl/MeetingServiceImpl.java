@@ -11,8 +11,10 @@ import com.denyskozii.meetingcounter.services.MeetingService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityNotFoundException;
+import javax.persistence.Transient;
 import javax.validation.Validator;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -98,8 +100,14 @@ public class MeetingServiceImpl implements MeetingService {
     }
 
     @Override
-    public boolean deleteMeeting(Long meetingId) {
-        meetingRepository.deleteById(meetingId);
+    @Transactional
+    public boolean deleteMeeting(Long meetingId, Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new EntityNotFoundException("User with id " + userId + " doesn't exists!"));
+        Meeting meeting = meetingRepository.findById(meetingId)
+                .orElseThrow(() -> new EntityNotFoundException("Meeting with id " + meetingId + " doesn't exists!"));
+        meeting.removeUser(user);
+        meetingRepository.save(meeting);
         return true;
     }
 
