@@ -74,6 +74,7 @@ public class Meeting {
 
     public void removeUser(User user){
         this.users.remove(user);
+        this.hereAmount-=1;
     }
 
 }
