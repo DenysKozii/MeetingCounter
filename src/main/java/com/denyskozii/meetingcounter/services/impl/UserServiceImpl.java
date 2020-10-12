@@ -130,6 +130,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
+    @Transactional
     public boolean addUserToMeeting(Long userId, Double longitude, Double latitude, Long meetingId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(()->new EntityNotFoundException("User with id " + userId + " not found"));
@@ -219,8 +220,4 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         userRepository.save(user);
         return true;
     }
-
-
-
-
 }
