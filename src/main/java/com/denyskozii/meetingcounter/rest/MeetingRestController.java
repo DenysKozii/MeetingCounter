@@ -45,8 +45,9 @@ public class MeetingRestController {
      * @param user
      * @return List<MeetingDto>
      */
-    @GetMapping("/getList")
+    @RequestMapping(value = "/getList", method = RequestMethod.GET)
     @PreAuthorize("hasAuthority('USER')")
+    @ResponseBody
     public List<MeetingDto> generateMeetings(@RequestParam Long startId,
                                              @RequestParam String title,
                                              @RequestParam GenerateMeetingDto generateMeetingDto,
