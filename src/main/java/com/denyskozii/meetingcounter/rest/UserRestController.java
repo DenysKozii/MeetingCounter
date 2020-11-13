@@ -102,7 +102,16 @@ public class UserRestController {
      * test connection.
      */
     @GetMapping("/version")
+    @PreAuthorize("hasAuthority('USER')")
     public String version() {
+        return "1.0";
+    }
+
+    /**
+     * test connection.
+     */
+    @GetMapping("/version/login")
+    public String versionLogin() {
         return "1.0";
     }
 }
